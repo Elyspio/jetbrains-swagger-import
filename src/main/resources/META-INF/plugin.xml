@@ -1,19 +1,18 @@
 <idea-plugin>
     <id>com.github.elyspio.jetbrainsswaggerimport</id>
-    <name>jetbrains-swagger-import</name>
+    <name>Jetbrains-Swagger-Import</name>
     <vendor>elyspio</vendor>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.elyspio.jetbrainsswaggerimport.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.elyspio.jetbrainsswaggerimport.services.MyProjectService"/>
-    </extensions>
+    <actions>
+        <action class="com.github.elyspio.jetbrainsswaggerimport.actions.FetchSwagger" id="FetchSwagger" text="Fetch Swagger" icon="/icons/swagger_icon.svg">
+            <add-to-group group-id="ToolbarRunGroup"/>
+        </action>
+    </actions>
 
-    <applicationListeners>
-        <listener class="com.github.elyspio.jetbrainsswaggerimport.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+
 </idea-plugin>
