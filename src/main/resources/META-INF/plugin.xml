@@ -1,0 +1,19 @@
+<idea-plugin>
+    <id>com.github.elyspio.jetbrainsswaggerimport</id>
+    <name>jetbrains-swagger-import</name>
+    <vendor>elyspio</vendor>
+
+    <!-- Product and plugin compatibility requirements -->
+    <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="com.github.elyspio.jetbrainsswaggerimport.services.MyApplicationService"/>
+        <projectService serviceImplementation="com.github.elyspio.jetbrainsswaggerimport.services.MyProjectService"/>
+    </extensions>
+
+    <applicationListeners>
+        <listener class="com.github.elyspio.jetbrainsswaggerimport.listeners.MyProjectManagerListener"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </applicationListeners>
+</idea-plugin>
