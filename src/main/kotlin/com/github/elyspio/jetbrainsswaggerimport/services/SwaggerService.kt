@@ -43,7 +43,7 @@ class SwaggerService {
             }
     }
 
-    fun import(dest: String, format: String, url: String) {
+    fun import(dest: String, format: String, url: String): Boolean {
         val processBuilder = ProcessBuilder(
             "java", "-jar", FileHelper.getJarPath().toString(),
             "generate", "-i", url, "-l", format, "-o", dest
@@ -68,6 +68,7 @@ class SwaggerService {
         }
         print("err $result")
 
+        return process.exitValue() != 0
     }
 
 }
