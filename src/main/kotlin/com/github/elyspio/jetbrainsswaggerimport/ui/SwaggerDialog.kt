@@ -1,4 +1,4 @@
-package com.github.elyspio.jetbrainsswaggerimport.dialog
+package com.github.elyspio.jetbrainsswaggerimport.ui
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.ui.ComboBox
@@ -7,9 +7,14 @@ import com.intellij.openapi.ui.TextBrowseFolderListener
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.DocumentAdapter
 import org.jetbrains.annotations.Nullable
-import java.awt.*
+import java.awt.Dimension
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
+import java.awt.GridLayout
 import java.util.stream.IntStream
 import javax.swing.*
+import javax.swing.event.DocumentEvent
+import javax.swing.event.DocumentListener
 
 
 class SwaggerDialog : DialogWrapper(true) {
@@ -24,6 +29,7 @@ class SwaggerDialog : DialogWrapper(true) {
     var format: String = ""
         private set
 
+
     var url: String = ""
         private set
 
@@ -33,9 +39,10 @@ class SwaggerDialog : DialogWrapper(true) {
         label.border = BorderFactory.createEmptyBorder(0, 0, 0, 5)
 
 
-        val formats = arrayOf<String?>("typescript-axios", "typescript-fetch", "java")
+        val formats = arrayOf("typescript-axios", "typescript-fetch", "java")
+        format = formats[0];
 
-        val formatCombo = ComboBox<String>(formats)
+        val formatCombo = ComboBox(formats)
 
         formatCombo.addActionListener {
             format = formatCombo.selectedItem as String
@@ -69,23 +76,30 @@ class SwaggerDialog : DialogWrapper(true) {
     }
 
     private fun createInputUrl(): List<JComponent> {
-        val panel = JPanel(BorderLayout())
         val label = JLabel("Input url (swagger.json)")
         label.border = BorderFactory.createEmptyBorder(0, 0, 0, 5)
 
-        val formatCombo = JFormattedTextField()
+        val urlField = JTextField()
 
-        formatCombo.addActionListener {
-            url = formatCombo.text
-        }
+        urlField.document.addDocumentListener(object : DocumentListener {
+            override fun insertUpdate(e: DocumentEvent?) {
+                url = urlField.text
+            }
 
-        panel.add(label, BorderLayout.WEST)
-        panel.add(formatCombo, BorderLayout.CENTER)
+            override fun removeUpdate(e: DocumentEvent?) {
+                url = urlField.text
+            }
 
-        formatCombo.size = Dimension(width - 100, 40)
-        formatCombo.minimumSize = Dimension(width - 100, 40)
+            override fun changedUpdate(e: DocumentEvent?) {
+            }
+        })
 
-        return listOf(panel, formatCombo)
+        urlField.size = Dimension(width - 100, 40)
+        urlField.minimumSize = Dimension(width - 100, 40)
+
+
+
+        return listOf(label, urlField)
 
     }
 
