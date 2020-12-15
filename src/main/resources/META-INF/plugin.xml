@@ -9,7 +9,8 @@
     <depends>com.intellij.modules.lang</depends>
 
     <actions>
-        <action class="com.github.elyspio.jetbrainsswaggerimport.actions.FetchSwagger" id="FetchSwagger" text="Fetch Swagger" icon="/icons/swagger_icon.svg">
+        <action class="com.github.elyspio.jetbrainsswaggerimport.actions.FetchSwagger" id="FetchSwagger"
+                text="Fetch Swagger" icon="/icons/swagger_icon.svg">
             <add-to-group group-id="ToolbarRunGroup"/>
         </action>
     </actions>
