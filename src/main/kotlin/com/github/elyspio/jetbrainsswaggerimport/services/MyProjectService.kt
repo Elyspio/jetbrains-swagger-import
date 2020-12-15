@@ -1,7 +1,7 @@
 package com.github.elyspio.jetbrainsswaggerimport.services
 
-import com.intellij.openapi.project.Project
 import com.github.elyspio.jetbrainsswaggerimport.MyBundle
+import com.intellij.openapi.project.Project
 
 class MyProjectService(project: Project) {
 

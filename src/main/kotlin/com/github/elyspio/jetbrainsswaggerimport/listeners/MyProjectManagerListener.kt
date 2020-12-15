@@ -1,9 +1,9 @@
 package com.github.elyspio.jetbrainsswaggerimport.listeners
 
+import com.github.elyspio.jetbrainsswaggerimport.services.MyProjectService
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
-import com.github.elyspio.jetbrainsswaggerimport.services.MyProjectService
 
 internal class MyProjectManagerListener : ProjectManagerListener {
 
