@@ -1,4 +1,4 @@
-package com.github.elyspio.jetbrainsswaggerimport.services
+package com.github.elyspio.swaggercodegen.services
 
 import com.intellij.notification.NotificationDisplayType
 import com.intellij.notification.NotificationGroup

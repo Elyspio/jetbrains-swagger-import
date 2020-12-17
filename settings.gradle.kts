@@ -1,1 +1,1 @@
-rootProject.name = "jetbrains-swagger-import"
+rootProject.name = "swagger-codegen"

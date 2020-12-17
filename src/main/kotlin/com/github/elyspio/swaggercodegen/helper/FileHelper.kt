@@ -1,4 +1,4 @@
-package com.github.elyspio.jetbrainsswaggerimport.helper
+package com.github.elyspio.swaggercodegen.helper
 
 import java.nio.file.Path
 
