@@ -1,8 +1,8 @@
-package com.github.elyspio.jetbrainsswaggerimport.actions
+package com.github.elyspio.swaggercodegen.actions
 
-import com.github.elyspio.jetbrainsswaggerimport.services.NotificationService
-import com.github.elyspio.jetbrainsswaggerimport.services.SwaggerService
-import com.github.elyspio.jetbrainsswaggerimport.ui.SwaggerDialog
+import com.github.elyspio.swaggercodegen.services.NotificationService
+import com.github.elyspio.swaggercodegen.services.SwaggerService
+import com.github.elyspio.swaggercodegen.ui.SwaggerDialog
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 

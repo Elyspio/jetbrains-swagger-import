@@ -1,4 +1,4 @@
-package com.github.elyspio.jetbrainsswaggerimport.ui
+package com.github.elyspio.swaggercodegen.ui
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.ui.ComboBox

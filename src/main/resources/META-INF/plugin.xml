@@ -1,7 +1,7 @@
 <idea-plugin>
-    <id>com.github.elyspio.jetbrainsswaggerimport</id>
-    <name>Jetbrains-Swagger-Import</name>
-    <vendor>elyspio</vendor>
+    <id>com.github.elyspio.swaggercodegen</id>
+    <name>Swagger Codegen</name>
+    <vendor>Elyspio</vendor>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
@@ -9,7 +9,7 @@
     <depends>com.intellij.modules.lang</depends>
 
     <actions>
-        <action class="com.github.elyspio.jetbrainsswaggerimport.actions.FetchSwagger" id="FetchSwagger"
+        <action class="com.github.elyspio.swaggercodegen.actions.FetchSwagger" id="FetchSwagger"
                 text="Fetch Swagger" icon="/icons/swagger_icon.svg">
             <add-to-group group-id="ToolbarRunGroup"/>
         </action>

@@ -1,6 +1,6 @@
-package com.github.elyspio.jetbrainsswaggerimport.services
+package com.github.elyspio.swaggercodegen.services
 
-import com.github.elyspio.jetbrainsswaggerimport.helper.FileHelper
+import com.github.elyspio.swaggercodegen.helper.FileHelper
 import com.intellij.util.io.exists
 import java.io.BufferedReader
 import java.io.InputStreamReader
