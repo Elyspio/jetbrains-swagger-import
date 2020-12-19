@@ -1,11 +1,18 @@
 package com.github.elyspio.swaggercodegen.services
 
+import org.apache.commons.io.FileUtils;
+
+
+import com.github.elyspio.swaggercodegen.core.Format
 import com.github.elyspio.swaggercodegen.helper.FileHelper
 import com.intellij.util.io.exists
+import com.jetbrains.rd.util.string.print
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 import java.net.URL
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 
 
@@ -43,32 +50,65 @@ class SwaggerService {
             }
     }
 
-    fun import(dest: String, format: String, url: String): Boolean {
-        val processBuilder = ProcessBuilder(
+    private fun postImport(dest: String, format: Format) {
+        if (format == Format.JavaRetrofit2) {
+//            val folderName = dest.substring(dest.lastIndexOf("/") + 1)
+
+            val tempFolder = Path.of(System.getProperty("java.io.tmpdir"), "swagger-import")
+
+            FileUtils.copyDirectory(
+                Path.of(dest, "src", "main", "java", "io", "swagger", "client").toFile(),
+                tempFolder.toFile()
+            )
+
+            FileUtils.deleteDirectory(File(dest))
+
+            FileUtils.copyDirectory(tempFolder.toFile(), File(dest))
+
+
+        }
+    }
+
+    fun import(dest: String, format: Format, url: String): Boolean {
+
+        val command = ArrayList(listOf(
             "java", "-jar", FileHelper.getJarPath().toString(),
-            "generate", "-i", url, "-l", format, "-o", dest
-        )
+            "generate", "-i", url, "-l", format.codegen, "-o", dest
+        ))
+
+        if (format == Format.JavaRetrofit2) {
+            command.addAll(listOf(
+                "--library",
+                "retrofit2",
+                "--additional-properties",
+                "java8=true,useRxJava2=true")
+            )
+
+        }
+
+
+        val processBuilder = ProcessBuilder(command)
         processBuilder.directory(FileHelper.getBundleJavaFolder().toFile())
         val process = processBuilder.start()
-        process.waitFor()
-        var result = StringBuilder(80)
         BufferedReader(InputStreamReader(process.inputStream)).use { `in` ->
             while (true) {
                 val line = `in`.readLine() ?: break
-                result.append(line).append("\r\n")
+                println(line)
             }
         }
-        print("log $result")
-        result = StringBuilder()
         BufferedReader(InputStreamReader(process.errorStream)).use { `in` ->
             while (true) {
                 val line = `in`.readLine() ?: break
-                result.append(line).append("\r\n")
+                println(line)
             }
         }
-        print("err $result")
+        process.waitFor()
+
+
+        postImport(dest, format)
 
         return process.exitValue() != 0
     }
+
 
 }

@@ -13,10 +13,6 @@ import com.intellij.ui.awt.RelativePoint
 
 class NotificationService {
     companion object {
-        private val STICKY_GROUP = NotificationGroup(
-            "demo.notifications.balloon",
-            NotificationDisplayType.BALLOON
-        )
 
         fun createNotification(title: String,
             serverity: MessageType = MessageType.INFO
