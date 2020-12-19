@@ -1,11 +1,13 @@
 package com.github.elyspio.swaggercodegen.ui
 
+import com.github.elyspio.swaggercodegen.core.Format
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.TextBrowseFolderListener
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.DocumentAdapter
+import com.intellij.util.containers.stream
 import org.jetbrains.annotations.Nullable
 import java.awt.Dimension
 import java.awt.GridBagConstraints
@@ -26,7 +28,7 @@ class SwaggerDialog : DialogWrapper(true) {
     var output: String = ""
         private set
 
-    var format: String = ""
+    var format: Format = Format.TypeScriptAxios
         private set
 
 
@@ -38,14 +40,10 @@ class SwaggerDialog : DialogWrapper(true) {
         val label = JLabel("Output format")
         label.border = BorderFactory.createEmptyBorder(0, 0, 0, 5)
 
-
-        val formats = arrayOf("typescript-axios", "typescript-fetch", "java")
-        format = formats[0];
-
-        val formatCombo = ComboBox(formats)
-
+        val formatCombo = ComboBox(Format.values().stream().map { it.label }.toArray())
+        formatCombo.selectedItem = format.label
         formatCombo.addActionListener {
-            format = formatCombo.selectedItem as String
+            format = Format.values().find { f -> f.label == formatCombo.selectedItem } as Format
         }
 
 
