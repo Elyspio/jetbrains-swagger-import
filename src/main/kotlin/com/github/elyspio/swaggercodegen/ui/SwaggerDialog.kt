@@ -1,6 +1,8 @@
 package com.github.elyspio.swaggercodegen.ui
 
 import com.github.elyspio.swaggercodegen.core.Format
+import com.github.elyspio.swaggercodegen.helper.FileHelper
+import com.github.elyspio.swaggercodegen.ui.format.IFormatInput
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
@@ -13,47 +15,42 @@ import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import java.awt.GridLayout
+import java.util.*
 import java.util.stream.IntStream
 import javax.swing.*
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.properties.Delegates
 
 
 class SwaggerDialog : DialogWrapper(true) {
 
 
-    var width: Int = 500
-    var height: Int = 300
+    var data = SwaggerInfo(this)
 
-    var output: String = ""
-        private set
-
-    var format: Format = Format.TypeScriptAxios
-        private set
-
-
-    var url: String = ""
-        private set
-
+    internal var additionalInputs: MutableMap<Format, List<IFormatInput.Data>> = EnumMap(Format::class.java)
 
     private fun createOutputFormat(): List<JComponent> {
         val label = JLabel("Output format")
         label.border = BorderFactory.createEmptyBorder(0, 0, 0, 5)
 
         val formatCombo = ComboBox(Format.values().stream().map { it.label }.toArray())
-        formatCombo.selectedItem = format.label
+        formatCombo.selectedItem = data.format.label
         formatCombo.addActionListener {
-            format = Format.values().find { f -> f.label == formatCombo.selectedItem } as Format
+            data.format = Format.values().find { f -> f.label == formatCombo.selectedItem } as Format
         }
 
 
-        formatCombo.size = Dimension(width - 100, 40)
-        formatCombo.minimumSize = Dimension(width - 100, 40)
+        formatCombo.size = Dimension(Constants.uiWidth, 40)
+        formatCombo.minimumSize = Dimension(Constants.uiWidth, 40)
 
         return listOf(label, formatCombo)
     }
 
     private fun createOutputFolder(): List<JComponent> {
+        val that = this
         val folderLabel = JLabel("Output folder")
         folderLabel.border = BorderFactory.createEmptyBorder(0, 0, 0, 10)
 
@@ -61,14 +58,15 @@ class SwaggerDialog : DialogWrapper(true) {
         val fd = FileChooserDescriptor(false, true, false, false, false, false)
         button.addBrowseFolderListener(TextBrowseFolderListener(fd))
         button.textField.document.addDocumentListener(object : DocumentAdapter() {
-            override fun textChanged(e: javax.swing.event.DocumentEvent) {
-                output = button.text
+            override fun textChanged(e: DocumentEvent) {
+                data.output = button.text
+                IFormatInput.of(data.format, that)?.onDirectoryChange(data.output)
             }
         })
         fd.description = "Folder where files will be generated"
 
-        button.size = Dimension(width - 100, 40)
-        button.minimumSize = Dimension(width - 100, 40)
+        button.size = Dimension(Constants.uiWidth, 40)
+        button.minimumSize = Dimension(Constants.uiWidth, 40)
 
         return listOf(folderLabel, button)
     }
@@ -81,24 +79,40 @@ class SwaggerDialog : DialogWrapper(true) {
 
         urlField.document.addDocumentListener(object : DocumentListener {
             override fun insertUpdate(e: DocumentEvent?) {
-                url = urlField.text
+                data.url = urlField.text
             }
 
             override fun removeUpdate(e: DocumentEvent?) {
-                url = urlField.text
+                data.url = urlField.text
             }
 
             override fun changedUpdate(e: DocumentEvent?) {
             }
         })
 
-        urlField.size = Dimension(width - 100, 40)
-        urlField.minimumSize = Dimension(width - 100, 40)
+        urlField.size = Dimension(Constants.uiWidth, 40)
+        urlField.minimumSize = Dimension(Constants.uiWidth, 40)
 
 
 
         return listOf(label, urlField)
 
+    }
+
+    private fun createAdditionalPanels() {
+        Format.values().forEach {
+
+            if (IFormatInput.of(it, this) != null) {
+                additionalInputs[it] = IFormatInput.of(it, this)!!.getComponent()
+
+                if (data.format != it) {
+                    additionalInputs[it]?.forEach { c ->
+                        c.label.isVisible = false
+                        c.input.isVisible = false
+                    }
+                }
+            }
+        }
     }
 
     @Nullable
@@ -111,12 +125,16 @@ class SwaggerDialog : DialogWrapper(true) {
         val components = ArrayList<JComponent>()
 
 
-
+        createAdditionalPanels()
 
 
         createInputUrl().forEach { c -> components.add(c) }
         createOutputFormat().forEach { c -> components.add(c) }
         createOutputFolder().forEach { c -> components.add(c) }
+
+
+
+        additionalInputs.forEach { (_, list) -> list.forEach { c -> components.add(c.label); components.add(c.input) } }
 
         IntStream.range(0, components.size).forEach {
 
@@ -129,7 +147,7 @@ class SwaggerDialog : DialogWrapper(true) {
         }
 
         val gbc = GridBagConstraints()
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc.fill = GridBagConstraints.BOTH
         gbc.gridx = 0
         gbc.gridy = 0
         gbc.weightx = 3.0
@@ -147,4 +165,51 @@ class SwaggerDialog : DialogWrapper(true) {
         init()
         title = "Swagger dialog"
     }
+
+
+    class SwaggerInfo(private var ui: SwaggerDialog) {
+        var output: String = ""
+            internal set
+
+        var format: Format by Delegates.observable(Format.TypeScriptAxios) { _, oldValue, newValue ->
+            run {
+                ui.additionalInputs.forEach { entry ->
+                    run {
+                        if (entry.key == oldValue) {
+                            entry.value.forEach { c ->
+                                c.input.isVisible = false
+                                c.label.isVisible = false
+                            }
+                        }
+                        if (entry.key == newValue) {
+
+                            if (entry.key == Format.JavaRetrofit2 && output.isNotEmpty()) {
+                                val p = FileHelper.getPackage(output)
+                                additionalParams["package"] = p
+                                (entry.value[1].input as JTextField).text = p
+                            }
+
+                            entry.value.forEach { c ->
+                                c.input.isVisible = true
+                                c.label.isVisible = true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+            internal set
+
+
+        var url: String = ""
+            internal set
+
+
+        var additionalParams: MutableMap<String, Any> = HashMap()
+            internal set
+
+
+    }
+
+
 }
