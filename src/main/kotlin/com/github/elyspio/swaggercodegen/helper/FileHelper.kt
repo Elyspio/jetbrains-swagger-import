@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
 import org.apache.commons.io.filefilter.WildcardFileFilter
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Path
 
 
@@ -56,6 +57,48 @@ class FileHelper {
             val minus = if (file.isFile()) 1 else 0
 
             return paths.subList(paths.lastIndexOf("java") + 1, paths.size - minus).joinToString(separator = ".", prefix = "", postfix = "")
+        }
+
+
+        fun getGradleBuild(folder: String): String? {
+            return getGradleBuild(Path.of(folder))
+        }
+
+
+        fun getGradleBuild(folder: Path): String? {
+            val matchs = listOf("build.gradle", "build.gradle.kts")
+
+            fun contains(dir: Path): Boolean {
+                val files = Files.list(dir)
+
+                for (file in files) {
+                    for (match in matchs) {
+                        if (file.toFile().path.contains(match)) {
+                            return true
+                        }
+                    }
+                }
+                return false
+            }
+
+
+            var run = true
+            var current = folder
+            while (run) {
+                if (contains(current)) {
+                    val files = Files.list(current)
+                    return files.filter { path -> matchs.any { m -> path.toString().contains(m) } }.findFirst().get().toString()
+                }
+                current = current.parent
+
+                if (current.toFile().path.length <= 3) {
+                    run = false
+                }
+            }
+
+            return null
+
+
         }
 
 

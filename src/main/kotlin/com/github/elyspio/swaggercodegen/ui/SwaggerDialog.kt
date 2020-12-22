@@ -3,6 +3,7 @@ package com.github.elyspio.swaggercodegen.ui
 import com.github.elyspio.swaggercodegen.core.Format
 import com.github.elyspio.swaggercodegen.helper.FileHelper
 import com.github.elyspio.swaggercodegen.ui.format.IFormatInput
+import com.github.elyspio.swaggercodegen.ui.format.JavaFormatInput
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
@@ -184,9 +185,11 @@ class SwaggerDialog : DialogWrapper(true) {
                         if (entry.key == newValue) {
 
                             if (entry.key == Format.JavaRetrofit2 && output.isNotEmpty()) {
-                                val p = FileHelper.getPackage(output)
-                                additionalParams["package"] = p
-                                (entry.value[1].input as JTextField).text = p
+                                additionalParams[JavaFormatInput.packagePath] = FileHelper.getPackage(output)
+                                (entry.value[0].input as JTextField).text = additionalParams[JavaFormatInput.packagePath] as String
+
+                                additionalParams[JavaFormatInput.gradleBuildLocation] = FileHelper.getGradleBuild(output) ?: ""
+                                (entry.value[1].input as JTextField).text = additionalParams[JavaFormatInput.gradleBuildLocation] as String
                             }
 
                             entry.value.forEach { c ->
