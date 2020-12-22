@@ -16,9 +16,14 @@ import javax.swing.event.DocumentListener
 
 class JavaFormatInput(ui: SwaggerDialog) : FormatInput(ui) {
 
+    companion object {
+        const val packagePath = "package"
+        const val gradleBuildLocation = "gradle-build"
+    }
+
 
     private fun createPackageInput(): List<IFormatInput.Data> {
-        val label = JLabel("Java package: ")
+        val label = JLabel("Java package")
 
         label.border = BorderFactory.createEmptyBorder(0, 0, 0, 5)
 
@@ -26,11 +31,11 @@ class JavaFormatInput(ui: SwaggerDialog) : FormatInput(ui) {
 
         field.document.addDocumentListener(object : DocumentListener {
             override fun insertUpdate(e: DocumentEvent?) {
-                ui.data.additionalParams["package"] = field.text
+                ui.data.additionalParams[packagePath] = field.text
             }
 
             override fun removeUpdate(e: DocumentEvent?) {
-                ui.data.additionalParams["package"] = field.text
+                ui.data.additionalParams[packagePath] = field.text
             }
 
             override fun changedUpdate(e: DocumentEvent?) {
@@ -40,13 +45,11 @@ class JavaFormatInput(ui: SwaggerDialog) : FormatInput(ui) {
         field.size = Dimension(Constants.uiWidth, 40)
         field.minimumSize = Dimension(Constants.uiWidth, 40)
 
-        return listOf(
-            IFormatInput.Data(label, field)
-        )
+        return listOf(IFormatInput.Data(label, field))
     }
 
     private fun createGradlePathInput(): List<IFormatInput.Data> {
-        val label = JLabel("Gradle setings location: ")
+        val label = JLabel("build.gradle location")
 
         label.border = BorderFactory.createEmptyBorder(0, 0, 0, 10)
 
@@ -55,19 +58,17 @@ class JavaFormatInput(ui: SwaggerDialog) : FormatInput(ui) {
         field.addBrowseFolderListener(TextBrowseFolderListener(fd))
         field.textField.document.addDocumentListener(object : DocumentAdapter() {
             override fun textChanged(e: DocumentEvent) {
-                ui.data.additionalParams["gradle-location"] = field.text
+                ui.data.additionalParams[gradleBuildLocation] = field.text
 
             }
         })
-        fd.description = "Location of gradle settings"
+        fd.description = "Location of build.gradle"
 
         field.size = Dimension(Constants.uiWidth, 40)
         field.minimumSize = Dimension(Constants.uiWidth, 40)
 
 
-        return listOf(
-            IFormatInput.Data(label, field)
-        )
+        return listOf(IFormatInput.Data(label, field))
     }
 
     override fun getComponent(): List<IFormatInput.Data> {
@@ -81,8 +82,12 @@ class JavaFormatInput(ui: SwaggerDialog) : FormatInput(ui) {
     }
 
     override fun onDirectoryChange(dir: String) {
-        ui.data.additionalParams["package"] = FileHelper.getPackage(dir)
-        ((ui.additionalInputs[ui.data.format]?.get(0))?.input as JTextField).text = ui.data.additionalParams["package"] as String
+        ui.data.additionalParams[packagePath] = FileHelper.getPackage(dir)
+        ((ui.additionalInputs[ui.data.format]?.get(0))?.input as JTextField).text = ui.data.additionalParams[packagePath] as String
+
+        ui.data.additionalParams[gradleBuildLocation] = FileHelper.getGradleBuild(dir) ?: ""
+        ((ui.additionalInputs[ui.data.format]?.get(1))?.input as TextFieldWithBrowseButton).text = ui.data.additionalParams[gradleBuildLocation] as String
+
     }
 
 }
