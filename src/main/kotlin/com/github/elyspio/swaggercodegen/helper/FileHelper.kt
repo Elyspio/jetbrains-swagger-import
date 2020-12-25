@@ -1,9 +1,6 @@
 package com.github.elyspio.swaggercodegen.helper
 
 import com.intellij.util.io.isFile
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.filefilter.TrueFileFilter
-import org.apache.commons.io.filefilter.WildcardFileFilter
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -38,12 +35,42 @@ class FileHelper {
         }
 
 
-        fun listJavaFiles(path: Path): MutableCollection<File>? {
-            return FileUtils.listFiles(path.toFile(), WildcardFileFilter("*.java"), TrueFileFilter.TRUE)
+        fun listJavaFiles(path: Path): MutableCollection<File> {
+            return listFile(path, "java")
         }
 
-        fun listJavaFiles(path: String): MutableCollection<File>? {
+        fun listJavaFiles(path: String): MutableCollection<File> {
             return listJavaFiles(Path.of(path))
+        }
+
+        fun listTypescriptFiles(path: Path): MutableCollection<File> {
+            return listFile(path, "ts")
+        }
+
+        fun listTypescriptFiles(path: String): MutableCollection<File> {
+            return listTypescriptFiles(Path.of(path))
+        }
+
+
+        fun listFile(path: Path, extension: String? = null): MutableCollection<File> {
+
+            val files = mutableListOf<File>()
+            path.toFile().walkTopDown().forEach {
+                when (extension) {
+                    null -> {
+                        files.add(it)
+                    }
+                    else -> {
+                        if (it.path.substring(it.path.length - (extension.length + 1), it.path.length).contains(".$extension"))
+                            files.add(it)
+                    }
+                }
+            }
+            return files
+        }
+
+        fun listFile(path: String, extension: String? = null): MutableCollection<File> {
+            return listFile(Path.of(path), extension)
         }
 
 
@@ -99,6 +126,16 @@ class FileHelper {
             return null
 
 
+        }
+
+
+        fun delete(file: File) {
+            file.deleteRecursively()
+        }
+
+        fun move(src: File, dest: File) {
+            src.copyRecursively(dest, true)
+            delete(src)
         }
 
 

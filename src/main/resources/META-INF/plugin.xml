@@ -2,6 +2,9 @@
     <id>com.github.elyspio.swaggercodegen</id>
     <name>Swagger Codegen</name>
     <vendor>Elyspio</vendor>
+    <description>Generates client interface from a swagger</description>
+    <version>0.0.7</version>
+    <change-notes>Initial release of the plugin.</change-notes>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->

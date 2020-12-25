@@ -87,7 +87,6 @@ class JavaFormatInput(ui: SwaggerDialog) : FormatInput(ui) {
 
         ui.data.additionalParams[gradleBuildLocation] = FileHelper.getGradleBuild(dir) ?: ""
         ((ui.additionalInputs[ui.data.format]?.get(1))?.input as TextFieldWithBrowseButton).text = ui.data.additionalParams[gradleBuildLocation] as String
-
     }
 
 }

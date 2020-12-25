@@ -1,7 +1,5 @@
 package com.github.elyspio.swaggercodegen.services
 
-import com.intellij.notification.NotificationDisplayType
-import com.intellij.notification.NotificationGroup
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.ui.MessageType
 import com.intellij.openapi.ui.popup.Balloon
