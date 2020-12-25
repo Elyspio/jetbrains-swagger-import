@@ -94,8 +94,6 @@ class SwaggerDialog : DialogWrapper(true) {
         urlField.size = Dimension(Constants.uiWidth, 40)
         urlField.minimumSize = Dimension(Constants.uiWidth, 40)
 
-
-
         return listOf(label, urlField)
 
     }
@@ -189,7 +187,7 @@ class SwaggerDialog : DialogWrapper(true) {
                                 (entry.value[0].input as JTextField).text = additionalParams[JavaFormatInput.packagePath] as String
 
                                 additionalParams[JavaFormatInput.gradleBuildLocation] = FileHelper.getGradleBuild(output) ?: ""
-                                (entry.value[1].input as JTextField).text = additionalParams[JavaFormatInput.gradleBuildLocation] as String
+                                (entry.value[1].input as TextFieldWithBrowseButton).text = additionalParams[JavaFormatInput.gradleBuildLocation] as String
                             }
 
                             entry.value.forEach { c ->
