@@ -6,19 +6,25 @@ import com.github.elyspio.swaggercodegen.ui.SwaggerDialog
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.ui.MessageType
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class FetchSwagger : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
+
         val dialog = SwaggerDialog()
         if (dialog.showAndGet()) {
-            val service = SwaggerService()
-            if (service.import(dialog.data)) {
-                NotificationService.createNotification("Import succeded")
-            } else {
-                NotificationService.createNotification("Error while importing Swagger api with url ${dialog.data.url}", serverity = MessageType.ERROR)
-            }
+            GlobalScope.launch {
+                val service = SwaggerService()
+                if (service.import(dialog.data)) {
+                    NotificationService.createNotification("Import succeded")
+                } else {
+                    NotificationService.createNotification("Error while importing Swagger api with url ${dialog.data.url}", serverity = MessageType.ERROR)
+                }
+            }.start()
         }
+
 
     }
 }

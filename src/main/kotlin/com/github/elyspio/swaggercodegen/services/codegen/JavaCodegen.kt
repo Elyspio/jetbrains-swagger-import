@@ -6,7 +6,6 @@ import com.github.elyspio.swaggercodegen.ui.DependencyDialog
 import com.github.elyspio.swaggercodegen.ui.DependencyDialog.Dependency
 import com.github.elyspio.swaggercodegen.ui.SwaggerDialog.SwaggerInfo
 import com.github.elyspio.swaggercodegen.ui.format.JavaFormatInput
-import org.apache.commons.io.FileUtils
 import java.io.File
 import java.nio.charset.Charset
 import java.nio.file.Files
@@ -36,7 +35,7 @@ class JavaCodegen(private val info: SwaggerInfo) : ICodegen {
     private fun fixImports() {
         val files = FileHelper.listJavaFiles(this.info.output)
 
-        files?.forEach {
+        files.forEach {
             val lines = it.readLines().filter{ s -> !s.contains("CollectionFormats") }
             it.writeText(lines.joinToString(System.lineSeparator(), prefix = "", postfix = ""), Charset.forName("UTF-8"))
         }
@@ -46,17 +45,17 @@ class JavaCodegen(private val info: SwaggerInfo) : ICodegen {
         val tempFolder = Path.of(System.getProperty("java.io.tmpdir"), "swagger-import")
 
         if (Files.exists(tempFolder)) {
-            FileUtils.deleteDirectory(tempFolder.toFile())
+            FileHelper.delete(tempFolder.toFile())
         }
 
-        FileUtils.moveDirectory(
+        FileHelper.move(
             Path.of(info.output, "src", "main", "java", "io", "swagger", "client").toFile(),
             tempFolder.toFile()
         )
 
-        FileUtils.deleteDirectory(File(info.output))
+        FileHelper.delete(File(info.output))
 
-        FileUtils.moveDirectory(tempFolder.toFile(), File(info.output))
+        FileHelper.move(tempFolder.toFile(), File(info.output))
 
         val files = Files.list(Path.of(info.output)).toList();
 
@@ -89,15 +88,14 @@ class JavaCodegen(private val info: SwaggerInfo) : ICodegen {
 
     private fun changePackages() {
         val files = FileHelper.listJavaFiles(info.output)
-        if (files != null) {
+        if (!files.isEmpty()) {
             changePackageName(files)
         }
     }
 
     private fun changePackageName(files: Collection<File>) {
 
-        val basePackage = info.additionalParams["package"] as String // & entre les deux arrays
-
+        val basePackage = info.additionalParams["package"] as String
 
         files.forEach {
             val packageName = FileHelper.getPackage(it.path)

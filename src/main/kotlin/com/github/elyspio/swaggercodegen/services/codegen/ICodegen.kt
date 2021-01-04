@@ -11,8 +11,8 @@ interface ICodegen {
         fun of(info: SwaggerDialog.SwaggerInfo): ICodegen? {
             return when (info.format) {
                 Format.JavaRetrofit2 -> JavaCodegen(info)
-                Format.TypeScriptAxios -> null
-                Format.TypeScriptFetch -> null
+                Format.TypeScriptAxios -> TypescriptCodegen(info)
+                Format.TypeScriptFetch -> TypescriptCodegen(info)
             }
         }
     }
