@@ -203,14 +203,42 @@ class SwaggerDialog : DialogWrapper(true) {
 
 
         var url: String = ""
+            internal set(value) {
+                field = value
+                observers.filter { it.key == ObservableProperties.URL }.forEach {
+                    it.value.forEach {
+                        it(value)
+                    }
+                }
+            }
+
+
+
+        var observers: MutableMap<ObservableProperties, MutableList<(value: Any) -> Unit>> = mutableMapOf(Pair(ObservableProperties.URL, mutableListOf()))
+
+
+        var additionalParams: MutableMap<String, Any> = mutableMapOf()
             internal set
 
 
-        var additionalParams: MutableMap<String, Any> = HashMap()
-            internal set
+        enum class ObservableProperties(val label: String) {
+            URL("URL")
+        }
+
+
+        fun build(): SwaggerFormData {
+            return SwaggerFormData(output, url, additionalParams, format)
+        }
 
 
     }
 
 
 }
+
+data class SwaggerFormData(
+    var output: String,
+    var url: String,
+    var additionalParams: MutableMap<String, Any>,
+    var format: Format
+)

@@ -1,16 +1,13 @@
-package com.github.elyspio.swaggercodegen.services.codegen
+package com.github.elyspio.swaggercodegen.services.generators.codegen
 
 import com.github.elyspio.swaggercodegen.helper.FileHelper
 import com.github.elyspio.swaggercodegen.ui.SwaggerDialog.SwaggerInfo
+import com.github.elyspio.swaggercodegen.ui.SwaggerFormData
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 
-class TypescriptCodegen(private val info: SwaggerInfo) : ICodegen {
-
-
-    private val dependencyList = listOf("swagger-annotations")
-
+class TypescriptCodegen(private val info: SwaggerFormData) : ICodegen {
 
     override fun use(): List<String> = listOf()
 

@@ -17,6 +17,7 @@ interface IFormatInput {
                 Format.JavaRetrofit2 -> JavaFormatInput(ui)
                 Format.TypeScriptAxios -> null
                 Format.TypeScriptFetch -> null
+                Format.TypeScriptRestTest -> TypeScriptTestRestInput(ui)
             }
         }
     }

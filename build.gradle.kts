@@ -43,6 +43,7 @@ repositories {
 }
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.2")
+    implementation("org.json:json:20201115")
 }
 
 
