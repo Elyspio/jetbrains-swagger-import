@@ -17,7 +17,7 @@ class FetchSwagger : AnAction() {
         if (dialog.showAndGet()) {
             GlobalScope.launch {
                 val service = SwaggerService()
-                if (service.import(dialog.data)) {
+                if (service.generate(dialog.data.build())) {
                     NotificationService.createNotification("Import succeded")
                 } else {
                     NotificationService.createNotification("Error while importing Swagger api with url ${dialog.data.url}", serverity = MessageType.ERROR)
