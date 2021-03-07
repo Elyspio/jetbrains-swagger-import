@@ -55,9 +55,9 @@ describe("Rest", () => {
         val code = response.httpCode
         return """
              it("${response.description}", async () => {
-                    const data: any = {};
-                    const ret = await new Apis.${removeSpaces(controller)}Api(undefined, "http://localhost:" + port).${removeSpaces(operationId)}(data);
-                    expect(ret.status).toEqual($code);
+//                    const data: any = {};
+//                    const ret = await new Apis.${removeSpaces(controller)}Api(undefined, "http://localhost:" + port).${removeSpaces(operationId)}(data);
+//                    expect(ret.status).toEqual($code);
              });
         """.trimIndent()
     }
