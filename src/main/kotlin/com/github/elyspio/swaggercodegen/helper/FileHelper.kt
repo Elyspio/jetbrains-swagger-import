@@ -25,6 +25,11 @@ object FileHelper {
     }
 
 
+    fun getConfigPath(): Path {
+        return pluginFolder.resolve("config.json")
+    }
+
+
     fun getBundleJavaFolder(): Path {
         return Path.of(System.getProperty("java.home"), "bin")
     }

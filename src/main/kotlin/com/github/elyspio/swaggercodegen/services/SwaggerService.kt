@@ -25,7 +25,7 @@ class SwaggerService {
         FileHelper.pluginFolder.toFile().mkdirs()
 
 
-        val latestVersion = MavenParser.getLatest();
+        val latestVersion = MavenParser.getLatest()
 
         if (!this.isLibDownloaded() || ConfigHelper.forceDownload || ConfigHelper.version < latestVersion) {
             println("Swagger Import - Lib is not present or a new version is available, downloading it")
@@ -51,6 +51,7 @@ class SwaggerService {
             )
         }
 
+        ConfigHelper.version = version
     }
 
 

@@ -3,7 +3,6 @@
 # jetbrains-swagger-import Changelog
 
 ## [Unreleased]
-
 ### Added
 
 ### Changed
@@ -15,24 +14,18 @@
 ### Fixed
 
 ### Security
+## [0.3.10]
+
+### Added
+
+Check if a new version of  [openapi-generator-cli](https://github.com/OpenAPITools/openapi-generator) is available before generating code
 
 ## [0.3.9]
 
-### Added
 
 ### Changed
 
 Use --skip-validate-spec for swagger-codegen cli to prevent errors
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-
-### Improve performances
 
 ## [0.2.0]
 
@@ -40,15 +33,6 @@ Use --skip-validate-spec for swagger-codegen cli to prevent errors
 
 Force re-download of the codegen plugin for this version
 
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 
 ## [0.1.5]
 
