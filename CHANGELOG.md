@@ -14,6 +14,11 @@
 ### Fixed
 
 ### Security
+## [0.3.11]
+
+### Changed
+Update README
+
 ## [0.3.10]
 
 ### Added
