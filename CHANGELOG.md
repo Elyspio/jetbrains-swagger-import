@@ -3,6 +3,7 @@
 # jetbrains-swagger-import Changelog
 
 ## [Unreleased]
+
 ### Added
 
 ### Changed
@@ -14,10 +15,14 @@
 ### Fixed
 
 ### Security
-## [0.3.6]
+
+## [0.3.9]
+
 ### Added
 
 ### Changed
+
+Use --skip-validate-spec for swagger-codegen cli to prevent errors
 
 ### Deprecated
 
@@ -26,93 +31,15 @@
 ### Fixed
 
 ### Security
-## [0.3.5]
-### Added
 
-### Changed
+### Improve performances
 
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-## [0.3.4]
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-## [0.3.4]
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-## [0.3.3]
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-## [0.3.1]
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-## [0.3.0]
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-## [0.3.0]
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 ## [0.2.0]
+
 ### Added
+
 Force re-download of the codegen plugin for this version
+
 ### Changed
 
 ### Deprecated
@@ -122,6 +49,9 @@ Force re-download of the codegen plugin for this version
 ### Fixed
 
 ### Security
+
 ## [0.1.5]
+
 ### Changed
+
 Migrating from swagger-codegen to openapi-generator

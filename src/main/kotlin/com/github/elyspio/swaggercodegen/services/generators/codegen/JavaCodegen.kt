@@ -4,14 +4,12 @@ import com.github.elyspio.swaggercodegen.core.GradleDependency
 import com.github.elyspio.swaggercodegen.helper.FileHelper
 import com.github.elyspio.swaggercodegen.ui.DependencyDialog
 import com.github.elyspio.swaggercodegen.ui.DependencyDialog.Dependency
-import com.github.elyspio.swaggercodegen.ui.SwaggerDialog.SwaggerInfo
 import com.github.elyspio.swaggercodegen.ui.SwaggerFormData
 import com.github.elyspio.swaggercodegen.ui.format.JavaFormatInput
 import java.io.File
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.streams.toList
 
 class JavaCodegen(private val info: SwaggerFormData) : ICodegen {
 
@@ -37,7 +35,7 @@ class JavaCodegen(private val info: SwaggerFormData) : ICodegen {
         val files = FileHelper.listJavaFiles(this.info.output)
 
         files.forEach {
-            val lines = it.readLines().filter{ s -> !s.contains("CollectionFormats") }
+            val lines = it.readLines().filter { s -> !s.contains("CollectionFormats") }
             it.writeText(lines.joinToString(System.lineSeparator(), prefix = "", postfix = ""), Charset.forName("UTF-8"))
         }
     }
@@ -67,7 +65,7 @@ class JavaCodegen(private val info: SwaggerFormData) : ICodegen {
             val path = it.toAbsolutePath().toString()
             val lastPath = path.substring(path.lastIndexOf(File.separator), path.length)
 
-            if(!keep.contains(lastPath.substring(1))) {
+            if (!keep.contains(lastPath.substring(1))) {
                 it.toFile().deleteRecursively();
             }
 

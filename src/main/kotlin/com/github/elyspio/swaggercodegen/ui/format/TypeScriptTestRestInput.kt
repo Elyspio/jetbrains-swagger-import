@@ -6,7 +6,6 @@ import com.github.elyspio.swaggercodegen.ui.Constants
 import com.github.elyspio.swaggercodegen.ui.SwaggerDialog
 import com.intellij.openapi.ui.ComboBox
 import java.awt.Dimension
-import java.net.MalformedURLException
 import javax.swing.BorderFactory
 import javax.swing.JLabel
 
@@ -16,6 +15,8 @@ class TypeScriptTestRestInput(ui: SwaggerDialog) : FormatInput(ui) {
         const val controllerName = "controller"
     }
 
+
+    private var threadSingloton: Thread? = null
 
     private fun createControllerNameInput(): List<IFormatInput.Data> {
         val label = JLabel("Controller")
@@ -36,16 +37,23 @@ class TypeScriptTestRestInput(ui: SwaggerDialog) : FormatInput(ui) {
 
 
         ui.data.observers[SwaggerDialog.SwaggerInfo.ObservableProperties.URL]?.add { url ->
-            try {
-                formatCombo.removeAllItems()
-                formatCombo.addItem(ALL_CONTROLLERS)
-                val newItems = SwaggerParser.getTags(url as String).toTypedArray()
-                for (item in newItems) {
-                    formatCombo.addItem(item)
-                }
-            } catch (e: MalformedURLException) {
 
+            threadSingloton?.interrupt()
+            threadSingloton = Thread {
+                try {
+                    formatCombo.removeAllItems()
+                    formatCombo.addItem(ALL_CONTROLLERS)
+                    val newItems = SwaggerParser.getTags(url.toString()).toTypedArray()
+                    for (item in newItems) {
+                        formatCombo.addItem(item)
+                    }
+
+                } catch (e: Exception) {
+                    System.err.println(e.toString())
+                }
             }
+            threadSingloton!!.start()
+
         }
 
 

@@ -21,8 +21,6 @@ import java.util.stream.IntStream
 import javax.swing.*
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 import kotlin.properties.Delegates
 
 
@@ -211,7 +209,6 @@ class SwaggerDialog : DialogWrapper(true) {
                     }
                 }
             }
-
 
 
         var observers: MutableMap<ObservableProperties, MutableList<(value: Any) -> Unit>> = mutableMapOf(Pair(ObservableProperties.URL, mutableListOf()))

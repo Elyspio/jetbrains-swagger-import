@@ -4,7 +4,6 @@ import com.github.elyspio.swaggercodegen.core.Format
 import com.github.elyspio.swaggercodegen.helper.FileHelper
 import com.github.elyspio.swaggercodegen.helper.swagger.SwaggerParser
 import com.github.elyspio.swaggercodegen.helper.swagger.SwaggerParser.ALL_CONTROLLERS
-import com.github.elyspio.swaggercodegen.helper.swagger.TagElement
 import com.github.elyspio.swaggercodegen.services.SwaggerService
 import com.github.elyspio.swaggercodegen.services.generators.codegen.ICodegen
 import com.github.elyspio.swaggercodegen.ui.SwaggerFormData
@@ -96,11 +95,11 @@ class TypescriptTestUnit(private val info: SwaggerFormData) : ICodegen {
 
     private fun normalizeControllerName(original: String): String {
         var new = original
-            .replace(Regex("([A-Z])"), ".$1" )
+            .replace(Regex("([A-Z])"), ".$1")
             .replace(" ", "")
             .toLowerCase()
 
-        if(new[0] == '.') new = new.substring(1);
+        if (new[0] == '.') new = new.substring(1);
         return new
     }
 

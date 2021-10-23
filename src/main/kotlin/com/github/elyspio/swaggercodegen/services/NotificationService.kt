@@ -12,7 +12,8 @@ import com.intellij.ui.awt.RelativePoint
 class NotificationService {
     companion object {
 
-        fun createNotification(title: String,
+        fun createNotification(
+            title: String,
             serverity: MessageType = MessageType.INFO
         ) {
             val project = ProjectManager.getInstance().openProjects[0]
