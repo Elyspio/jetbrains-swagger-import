@@ -16,7 +16,7 @@ class DependencyTableModel(private val data: List<DependencyDialog.Dependency>) 
     }
 
     override fun getColumnCount(): Int {
-        return columns.size;
+        return columns.size
     }
 
     override fun getValueAt(rowIndex: Int, columnIndex: Int): Any {

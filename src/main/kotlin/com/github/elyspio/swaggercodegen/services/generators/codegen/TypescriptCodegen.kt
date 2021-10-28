@@ -31,7 +31,7 @@ class TypescriptCodegen(private val info: SwaggerFormData) : ICodegen {
 
     private fun removeNonTypescriptFiles() {
 
-        val typescriptFiles = FileHelper.listTypescriptFiles(this.info.output);
+        val typescriptFiles = FileHelper.listTypescriptFiles(this.info.output)
         val allFiles = FileHelper.listFile(this.info.output)
 
         val filesToRemove = allFiles.filter { f -> !typescriptFiles.contains(f) }

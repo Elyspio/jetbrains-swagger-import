@@ -13,10 +13,8 @@ object FileHelper {
     private fun getAppdataFolder(): String {
         val os = (System.getProperty("os.name")).toUpperCase()
 
-        return if (os.contains("WIN"))
-            System.getenv("LocalAppdata")
-        else
-            System.getProperty("user.home")
+        return if (os.contains("WIN")) System.getenv("LocalAppdata")
+        else System.getProperty("user.home")
 
     }
 
@@ -65,8 +63,7 @@ object FileHelper {
                     files.add(it)
                 }
                 else -> {
-                    if (it.path.substring(it.path.length - (extension.length + 1), it.path.length).contains(".$extension"))
-                        files.add(it)
+                    if (it.path.substring(it.path.length - (extension.length + 1), it.path.length).contains(".$extension")) files.add(it)
                 }
             }
         }
@@ -87,7 +84,10 @@ object FileHelper {
 
         val minus = if (file.isFile()) 1 else 0
 
-        return paths.subList(paths.lastIndexOf("java") + 1, paths.size - minus).joinToString(separator = ".", prefix = "", postfix = "")
+        var index = paths.indexOf("java")
+        if (index == -1) index = paths.indexOf("kotlin")
+
+        return paths.subList(index + 1, paths.size - minus).joinToString(separator = ".", prefix = "", postfix = "")
     }
 
 

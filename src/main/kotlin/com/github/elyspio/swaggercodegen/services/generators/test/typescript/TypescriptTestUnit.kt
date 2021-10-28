@@ -34,7 +34,7 @@ class TypescriptTestUnit(private val info: SwaggerFormData) : ICodegen {
         (info.additionalParams["controller"] as List<*>).toList().forEach {
 
             val newInfo = info.deepClonePolymorphic()
-            newInfo.additionalParams["controller"] = it.toString();
+            newInfo.additionalParams["controller"] = it.toString()
             val newSwaggerDefinition = SwaggerParser.extract(newInfo)
 
             var path = projectFiles.serverFile.relativeTo(File(controllerFolder.path)).path
@@ -99,7 +99,7 @@ class TypescriptTestUnit(private val info: SwaggerFormData) : ICodegen {
             .replace(" ", "")
             .toLowerCase()
 
-        if (new[0] == '.') new = new.substring(1);
+        if (new[0] == '.') new = new.substring(1)
         return new
     }
 

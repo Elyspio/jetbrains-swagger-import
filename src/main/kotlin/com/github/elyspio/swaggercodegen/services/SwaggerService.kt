@@ -27,7 +27,7 @@ class SwaggerService {
 
         val latestVersion = MavenParser.getLatest()
 
-        if (!this.isLibDownloaded() || ConfigHelper.forceDownload || ConfigHelper.version < latestVersion) {
+        if (!this.isLibDownloaded() || ConfigHelper.forceDownload || ConfigHelper.engineVersion < latestVersion) {
             println("Swagger Import - Lib is not present or a new version is available, downloading it")
             downloadLib(latestVersion)
         }
@@ -51,7 +51,7 @@ class SwaggerService {
             )
         }
 
-        ConfigHelper.version = version
+        ConfigHelper.engineVersion = version
     }
 
 
@@ -105,7 +105,8 @@ class SwaggerService {
                 }
             }
         } catch (e: Exception) {
-            Logger.getInstance("")
+            val logger = Logger.getInstance("")
+            logger.error(e)
             Notifications.Bus.notify(Notification("ADB Logs", "Swagger error", e.stackTrace.toString(), NotificationType.ERROR))
             return false
         }

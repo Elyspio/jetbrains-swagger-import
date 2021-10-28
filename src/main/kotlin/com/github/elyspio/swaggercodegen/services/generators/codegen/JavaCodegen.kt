@@ -6,6 +6,7 @@ import com.github.elyspio.swaggercodegen.ui.DependencyDialog
 import com.github.elyspio.swaggercodegen.ui.DependencyDialog.Dependency
 import com.github.elyspio.swaggercodegen.ui.SwaggerFormData
 import com.github.elyspio.swaggercodegen.ui.format.JavaFormatInput
+import com.intellij.openapi.application.ApplicationManager
 import java.io.File
 import java.nio.charset.Charset
 import java.nio.file.Files
@@ -48,7 +49,7 @@ class JavaCodegen(private val info: SwaggerFormData) : ICodegen {
         }
 
         FileHelper.move(
-            Path.of(info.output, "src", "main", "java", "io", "swagger", "client").toFile(),
+            Path.of(info.output, "src", "main", "java", "org", "openapitools", "client").toFile(),
             tempFolder.toFile()
         )
 
@@ -56,7 +57,7 @@ class JavaCodegen(private val info: SwaggerFormData) : ICodegen {
 
         FileHelper.move(tempFolder.toFile(), File(info.output))
 
-        val files = Files.list(Path.of(info.output)).toList();
+        val files = Files.list(Path.of(info.output))
 
 
         val keep = listOf("api", "model")
@@ -66,7 +67,7 @@ class JavaCodegen(private val info: SwaggerFormData) : ICodegen {
             val lastPath = path.substring(path.lastIndexOf(File.separator), path.length)
 
             if (!keep.contains(lastPath.substring(1))) {
-                it.toFile().deleteRecursively();
+                it.toFile().deleteRecursively()
             }
 
         }
@@ -82,7 +83,11 @@ class JavaCodegen(private val info: SwaggerFormData) : ICodegen {
             dependencies.add(Dependency(it, gradle.contains(it)))
         }
 
-        DependencyDialog(dependencies).show()
+        ApplicationManager.getApplication().runReadAction {
+            DependencyDialog(dependencies).show()
+        }
+
+
     }
 
     private fun changePackages() {

@@ -4,6 +4,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class Version : Comparable<Version> {
+
+
+    companion object {
+        val Default = Version("0.0.0")
+    }
+
+
     constructor(version: String) {
         if (version.filter { it == '.' }.length != 2) {
             throw Exception("Malformed version : $version")
@@ -25,6 +32,8 @@ class Version : Comparable<Version> {
     override fun toString(): String {
         return "$major.$minor.$revision"
     }
+
+
 }
 
 

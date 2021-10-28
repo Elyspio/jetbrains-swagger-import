@@ -14,9 +14,30 @@
 ### Fixed
 
 ### Security
+## [0.3.13]
+
+### Fixed
+
+Output format Java : remove useless files from being generated 
+
+## [0.3.12]
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
 ## [0.3.11]
 
 ### Changed
+
 Update README
 
 ## [0.3.10]
@@ -27,7 +48,6 @@ Check if a new version of  [openapi-generator-cli](https://github.com/OpenAPIToo
 
 ## [0.3.9]
 
-
 ### Changed
 
 Use --skip-validate-spec for swagger-codegen cli to prevent errors
@@ -37,7 +57,6 @@ Use --skip-validate-spec for swagger-codegen cli to prevent errors
 ### Added
 
 Force re-download of the codegen plugin for this version
-
 
 ## [0.1.5]
 
