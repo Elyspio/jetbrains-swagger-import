@@ -3,19 +3,15 @@
 <!-- Plugin description -->
 This Fancy IntelliJ Platform Plugin allow you to generate swagger implementation from a swagger.json config
 
-Implementions availables :
+## Implementions available
 
 - Typescript:
     - Fetch
     - Axios
-    - Generate Tests
-- Kotlin:
-    - Retrofit
+    - Generate Unit tests
+- Java/Kotlin:
+    - Retrofit2
 
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build
-process.
-
-To keep everything working, do not remove `<!-- ... -->` sections.
 <!-- Plugin description end -->
 
 ## Installation
@@ -31,7 +27,32 @@ To keep everything working, do not remove `<!-- ... -->` sections.
   Download the [latest release](https://github.com/Elyspio/jetbrains-swagger-import/releases/latest) and install it manually using
   <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
----
-Plugin based on the [IntelliJ Platform Plugin Template][template].
+## Usage
+
+### Start the plugin
+
+![](./.github/launch.png)
+
+### Fill fields
+
+1. Url to the `swagger.json` file
+2. Output type (see [implementations available](#implementions-available))
+3. The output folder
+4. Generate (OK)
+
+![](./.github/swagger_dialog.png)
+
+#### Specific fields for java implementation
+
+1. Url to the `swagger.json` file
+2. Select `Java (retrofit2)`
+3. The output folder
+4. Ensure that  `Java package` and `build.gradle location` are correct
+5. Generate (OK)
+
+![](./.github/swagger_dialog_java.png)
 
 [template]: https://github.com/JetBrains/intellij-platform-plugin-template
+
+---
+Plugin based on the [IntelliJ Platform Plugin Template][template].

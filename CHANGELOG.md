@@ -3,22 +3,16 @@
 # jetbrains-swagger-import Changelog
 
 ## [Unreleased]
+
 ### Added
 
-### Changed
+Add usage example in readme
 
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 ## [0.3.13]
 
 ### Fixed
 
-Output format Java : remove useless files from being generated 
+Output format Java : remove useless files from being generated
 
 ## [0.3.12]
 
