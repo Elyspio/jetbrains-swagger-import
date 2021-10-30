@@ -8,6 +8,7 @@ This Fancy IntelliJ Platform Plugin allow you to generate swagger implementation
 - Typescript:
     - Fetch
     - Axios
+    - Inversify
     - Generate Unit tests
 - Java/Kotlin:
     - Retrofit2
@@ -42,17 +43,16 @@ This Fancy IntelliJ Platform Plugin allow you to generate swagger implementation
 
 ![](./.github/swagger_dialog.png)
 
-#### Specific fields for java implementation
+#### Specific fields for Java/Kotlin implementation
 
 1. Url to the `swagger.json` file
-2. Select `Java (retrofit2)`
+2. Select `Java (retrofit2) or Kotlin (retrofit2)`
 3. The output folder
 4. Ensure that  `Java package` and `build.gradle location` are correct
 5. Generate (OK)
 
 ![](./.github/swagger_dialog_java.png)
 
-[template]: https://github.com/JetBrains/intellij-platform-plugin-template
 
 ---
-Plugin based on the [IntelliJ Platform Plugin Template][template].
+Plugin based on the [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template).

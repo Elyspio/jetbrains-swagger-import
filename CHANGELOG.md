@@ -3,19 +3,6 @@
 # jetbrains-swagger-import Changelog
 
 ## [Unreleased]
-
-### Added
-
-Add usage example in readme
-
-## [0.3.13]
-
-### Fixed
-
-Output format Java : remove useless files from being generated
-
-## [0.3.12]
-
 ### Added
 
 ### Changed
@@ -27,6 +14,23 @@ Output format Java : remove useless files from being generated
 ### Fixed
 
 ### Security
+
+## [0.4.0]
+### Added
+
+Create an example project on the "example" branch
+
+## [0.3.14]
+
+### Added
+
+Add usage example in readme
+
+## [0.3.13]
+
+### Fixed
+
+Output format Java : remove useless files from being generated
 
 ## [0.3.11]
 

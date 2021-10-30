@@ -32,21 +32,17 @@ object FileHelper {
         return Path.of(System.getProperty("java.home"), "bin")
     }
 
-    private fun getJavaPath(): Path {
-        return getBundleJavaFolder().resolve("java")
+
+    fun listJvmFiles(path: Path): Collection<File> {
+        return listFile(path, listOf("java", "kt"))
     }
 
-
-    fun listJavaFiles(path: Path): Collection<File> {
-        return listFile(path, "java")
-    }
-
-    fun listJavaFiles(path: String): Collection<File> {
-        return listJavaFiles(Path.of(path))
+    fun listJvmFiles(path: String): Collection<File> {
+        return listJvmFiles(Path.of(path))
     }
 
     fun listTypescriptFiles(path: Path, ignoreNodeModules: Boolean = false): Collection<File> {
-        return listFile(path, "ts").filter { !it.path.contains("node_modules") || !ignoreNodeModules }
+        return listFile(path, listOf("ts")).filter { !it.path.contains("node_modules") || !ignoreNodeModules }
     }
 
     fun listTypescriptFiles(path: String, ignoreNodeModules: Boolean = false): Collection<File> {
@@ -54,24 +50,26 @@ object FileHelper {
     }
 
 
-    fun listFile(path: Path, extension: String? = null): MutableCollection<File> {
+    fun listFile(path: Path, extensions: Collection<String> = listOf()): MutableCollection<File> {
 
         val files = mutableListOf<File>()
         path.toFile().walkTopDown().forEach {
-            when (extension) {
-                null -> {
+            when (extensions.size) {
+                0 -> {
                     files.add(it)
                 }
                 else -> {
-                    if (it.path.substring(it.path.length - (extension.length + 1), it.path.length).contains(".$extension")) files.add(it)
+                    extensions.forEach { ext ->
+                        if (it.path.substring(it.path.length - (ext.length + 1), it.path.length).contains(".$ext")) files.add(it)
+                    }
                 }
             }
         }
         return files
     }
 
-    fun listFile(path: String, extension: String? = null): MutableCollection<File> {
-        return listFile(Path.of(path), extension)
+    fun listFile(path: String, extensions: Collection<String> = listOf()): MutableCollection<File> {
+        return listFile(Path.of(path), extensions)
     }
 
 

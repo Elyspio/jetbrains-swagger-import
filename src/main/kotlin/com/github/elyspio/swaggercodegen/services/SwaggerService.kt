@@ -57,7 +57,6 @@ class SwaggerService {
 
     fun generate(info: SwaggerFormData): Boolean {
 
-        // Ensure that enpoint is valid
         try {
             URL(info.url).readText()
         } catch (e: Exception) {
@@ -67,18 +66,15 @@ class SwaggerService {
 
         val codegen = ICodegen.of(info)
 
-
         try {
 
             when {
                 info.format.codegen != null -> {
-                    val command = ArrayList(
-                        listOf(
-                            "java", "-jar", FileHelper.getJarPath().toString(), "generate", "--skip-validate-spec", "-i", info.url, "-g", info.format.codegen, "-o", info.output
-                        )
+                    val command = mutableListOf(
+                        "java", "-jar", FileHelper.getJarPath().toString(), "generate", "--skip-validate-spec", "-i", info.url, "-g", info.format.codegen!!, "-o", info.output
                     )
 
-                    codegen?.let { it -> command.addAll(it.use()) }
+                    codegen.let { command.addAll(it.use()) }
 
                     val processBuilder = ProcessBuilder(command)
                     processBuilder.directory(FileHelper.getBundleJavaFolder().toFile())
@@ -96,12 +92,11 @@ class SwaggerService {
                         }
                     }
                     process.waitFor()
-                    codegen?.post()
+                    codegen.post()
                     return process.exitValue() == 0
                 }
-
                 else -> {
-                    codegen?.post()
+                    codegen.post()
                 }
             }
         } catch (e: Exception) {

@@ -9,22 +9,20 @@ import com.intellij.openapi.wm.WindowManager
 import com.intellij.ui.awt.RelativePoint
 
 
-class NotificationService {
-    companion object {
+object NotificationService {
 
-        fun createNotification(
-            title: String,
-            serverity: MessageType = MessageType.INFO
-        ) {
-            val project = ProjectManager.getInstance().openProjects[0]
+    fun createNotification(
+        title: String,
+        serverity: MessageType = MessageType.INFO
+    ) {
+        val project = ProjectManager.getInstance().openProjects[0]
 
-            val statusBar: StatusBar = WindowManager.getInstance().getStatusBar(project)
+        val statusBar: StatusBar = WindowManager.getInstance().getStatusBar(project)
 
-            JBPopupFactory.getInstance().createHtmlTextBalloonBuilder(title, serverity) {}
-                .createBalloon()
-                .show(RelativePoint.getCenterOf(statusBar.component), Balloon.Position.above)
+        JBPopupFactory.getInstance().createHtmlTextBalloonBuilder(title, serverity) {}
+            .createBalloon()
+            .show(RelativePoint.getCenterOf(statusBar.component), Balloon.Position.above)
 
 
-        }
     }
 }

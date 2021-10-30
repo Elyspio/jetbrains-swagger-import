@@ -15,8 +15,10 @@ interface IFormatInput {
         fun of(format: Format, ui: SwaggerDialog): IFormatInput? {
             return when (format) {
                 Format.JavaRetrofit2 -> JavaFormatInput(ui)
+                Format.Kotlin -> JavaFormatInput(ui)
                 Format.TypeScriptAxios -> null
                 Format.TypeScriptFetch -> null
+                Format.TypeScriptInversify -> null
                 Format.TypeScriptRestTest -> TypeScriptTestRestInput(ui)
             }
         }
