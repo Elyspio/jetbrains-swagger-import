@@ -3,6 +3,7 @@ package com.github.elyspio.swaggercodegen.helper
 import com.github.elyspio.swaggercodegen.config.AppConfig
 import com.github.elyspio.swaggercodegen.config.Versions
 import com.github.elyspio.swaggercodegen.helper.swagger.maven.Version
+import com.github.elyspio.swaggercodegen.ui.SwaggerFormData
 import com.intellij.ide.plugins.PluginManagerCore
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.util.io.exists
@@ -11,17 +12,23 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+
+val format = Json { prettyPrint = true }
+
+
 object ConfigHelper {
 
     private var config: AppConfig
 
 
-    val forceDownload: Boolean
+    var forceDownload: Boolean
         get() = config.forceDownload
+        set(v) {
+            config.forceDownload = v
+        }
 
 
     init {
-
         try {
             if (FileHelper.getConfigPath().exists()) {
                 val json = FileHelper.getConfigPath().toFile().readText(Charsets.UTF_8)
@@ -55,8 +62,16 @@ object ConfigHelper {
         }
 
 
+    var history: SwaggerFormData?
+        get() = config.history
+        set(v) {
+            config.history = v
+            write()
+        }
+
+
     private fun write() {
-        FileHelper.getConfigPath().toFile().writeText(Json.encodeToString(this.config))
+        FileHelper.getConfigPath().toFile().writeText(format.encodeToString(this.config))
     }
 
 
@@ -70,3 +85,4 @@ object ConfigHelper {
     }
 
 }
+

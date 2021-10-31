@@ -11,9 +11,9 @@ import com.intellij.openapi.ui.MessageType
 class FetchSwagger : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
 
+        val service = SwaggerService()
         val dialog = SwaggerDialog()
         if (dialog.showAndGet()) {
-            val service = SwaggerService()
             if (service.generate(dialog.data.build())) {
                 NotificationService.createNotification("Import succeded")
             } else {

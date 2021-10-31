@@ -6,6 +6,7 @@ import com.github.elyspio.swaggercodegen.helper.swagger.SwaggerParser
 import com.github.elyspio.swaggercodegen.helper.swagger.SwaggerParser.ALL_CONTROLLERS
 import com.github.elyspio.swaggercodegen.services.SwaggerService
 import com.github.elyspio.swaggercodegen.services.generators.codegen.ICodegen
+import com.github.elyspio.swaggercodegen.ui.AdditionalParams
 import com.github.elyspio.swaggercodegen.ui.SwaggerFormData
 import com.jetbrains.rd.framework.base.deepClonePolymorphic
 import java.io.File
@@ -25,16 +26,18 @@ class TypescriptTestUnit(private val info: SwaggerFormData) : ICodegen {
 
         controllerFolder.mkdirs()
 
-        if (info.additionalParams["controller"] == ALL_CONTROLLERS) {
-            info.additionalParams["controller"] = swaggerDefinition.tags.map { it.name }
+        val selectedController = info.additionalParams.typeScriptTestUnit!!.controllers
+
+        if (selectedController.contains(ALL_CONTROLLERS)) {
+            info.additionalParams.typeScriptTestUnit!!.controllers = swaggerDefinition.tags.map { it.name }
         } else {
-            info.additionalParams["controller"] = listOf(ALL_CONTROLLERS)
+            info.additionalParams.typeScriptTestUnit!!.controllers = listOf(ALL_CONTROLLERS)
         }
 
-        (info.additionalParams["controller"] as List<*>).toList().forEach {
+        selectedController.toList().forEach {
 
             val newInfo = info.deepClonePolymorphic()
-            newInfo.additionalParams["controller"] = it.toString()
+            newInfo.additionalParams.typeScriptTestUnit!!.controllers = listOf(it)
             val newSwaggerDefinition = SwaggerParser.extract(newInfo)
 
             var path = projectFiles.serverFile.relativeTo(File(controllerFolder.path)).path
@@ -46,7 +49,7 @@ class TypescriptTestUnit(private val info: SwaggerFormData) : ICodegen {
                 import {PlatformExpress} from "@tsed/platform-express";
                 import * as Apis from "../api";
                 """.trimIndent() + "\n" + template
-            File(controllerFolder, "${normalizeControllerName(it.toString())}.test.ts").writeText(str)
+            File(controllerFolder, "${normalizeControllerName(it)}.test.ts").writeText(str)
         }
 
 
@@ -58,7 +61,7 @@ class TypescriptTestUnit(private val info: SwaggerFormData) : ICodegen {
                 output = apiFolder.toString(),
                 format = Format.TypeScriptAxios,
                 url = info.url,
-                additionalParams = mutableMapOf()
+                additionalParams = AdditionalParams()
             )
         )
 

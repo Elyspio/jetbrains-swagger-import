@@ -14,6 +14,10 @@
 ### Fixed
 
 ### Security
+## [0.4.2]
+### Added
+
+Add an history : keep last fields for the next generation dialog
 
 ## [0.4.0]
 ### Added

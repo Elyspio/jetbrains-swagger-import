@@ -16,26 +16,21 @@ import javax.swing.event.DocumentListener
 
 class JavaFormatInput(ui: SwaggerDialog) : FormatInput(ui) {
 
-    companion object {
-        const val packagePath = "package"
-        const val gradleBuildLocation = "gradle-build"
-    }
-
-
     private fun createPackageInput(): List<IFormatInput.Data> {
         val label = JLabel("Java package")
 
         label.border = BorderFactory.createEmptyBorder(0, 0, 0, 5)
 
         val field = JTextField()
+        field.text = ui.data.additionalParams.jvm!!.packagePath
 
         field.document.addDocumentListener(object : DocumentListener {
             override fun insertUpdate(e: DocumentEvent?) {
-                ui.data.additionalParams[packagePath] = field.text
+                ui.data.additionalParams.jvm!!.packagePath = field.text
             }
 
             override fun removeUpdate(e: DocumentEvent?) {
-                ui.data.additionalParams[packagePath] = field.text
+                ui.data.additionalParams.jvm!!.packagePath = field.text
             }
 
             override fun changedUpdate(e: DocumentEvent?) {
@@ -54,11 +49,12 @@ class JavaFormatInput(ui: SwaggerDialog) : FormatInput(ui) {
         label.border = BorderFactory.createEmptyBorder(0, 0, 0, 10)
 
         val field = TextFieldWithBrowseButton()
+        field.text = ui.data.additionalParams.jvm!!.gradleBuildLocation
         val fd = FileChooserDescriptor(true, false, false, false, false, false)
         field.addBrowseFolderListener(TextBrowseFolderListener(fd))
         field.textField.document.addDocumentListener(object : DocumentAdapter() {
             override fun textChanged(e: DocumentEvent) {
-                ui.data.additionalParams[gradleBuildLocation] = field.text
+                ui.data.additionalParams.jvm!!.gradleBuildLocation = field.text
 
             }
         })
@@ -82,11 +78,11 @@ class JavaFormatInput(ui: SwaggerDialog) : FormatInput(ui) {
     }
 
     override fun onDirectoryChange(dir: String) {
-        ui.data.additionalParams[packagePath] = FileHelper.getPackage(dir)
-        ((ui.additionalInputs[ui.data.format]?.get(0))?.input as JTextField).text = ui.data.additionalParams[packagePath] as String
+        ui.data.additionalParams.jvm!!.packagePath = FileHelper.getPackage(dir)
+        ((ui.additionalInputs[ui.data.format]?.get(0))?.input as JTextField).text = ui.data.additionalParams.jvm!!.packagePath
 
-        ui.data.additionalParams[gradleBuildLocation] = FileHelper.getGradleBuild(dir) ?: ""
-        ((ui.additionalInputs[ui.data.format]?.get(1))?.input as TextFieldWithBrowseButton).text = ui.data.additionalParams[gradleBuildLocation] as String
+        ui.data.additionalParams.jvm!!.gradleBuildLocation = FileHelper.getGradleBuild(dir) ?: ""
+        ((ui.additionalInputs[ui.data.format]?.get(1))?.input as TextFieldWithBrowseButton).text = ui.data.additionalParams.jvm!!.gradleBuildLocation
     }
 
 }

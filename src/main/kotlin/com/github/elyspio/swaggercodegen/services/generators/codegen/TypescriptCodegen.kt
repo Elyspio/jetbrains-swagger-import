@@ -8,7 +8,7 @@ import java.nio.file.Path
 
 class TypescriptCodegen(private val info: SwaggerFormData) : ICodegen {
 
-    override fun use(): List<String> = listOf()
+    override fun use(): List<String> = listOf("--additional-properties", "usePromise=true,supportsES6=true")
 
     override fun post() {
         removeNonTypescriptFiles()

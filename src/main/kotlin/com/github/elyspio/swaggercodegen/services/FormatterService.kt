@@ -6,7 +6,6 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
 import java.nio.file.Path
@@ -22,8 +21,6 @@ object FormatterService {
         val files = FileHelper.listFile(path).filter { !it.isDirectory }.map { it.name }
 
         val project = ProjectManager.getInstance().openProjects[0]
-
-        val style = CodeStyleManager.getInstance(project)
 
         val fileDocMgr = FileDocumentManager.getInstance()
         val psiDocumentMgr = PsiDocumentManager.getInstance(project)

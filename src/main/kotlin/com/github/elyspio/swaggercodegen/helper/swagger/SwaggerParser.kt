@@ -13,7 +13,8 @@ object SwaggerParser {
     fun extract(conf: SwaggerFormData): SwaggerDefinition {
         val raw = URL(conf.url).readText()
         val json = JSONObject(raw)
-        val getOnly = listOf(conf.additionalParams["controller"])
+        val selectedController = conf.additionalParams.typeScriptTestUnit!!.controllers
+        val getOnly = setOf(selectedController)
 
         val ret = SwaggerDefinition(json.getString("openapi"), mutableMapOf(), mutableListOf())
 
@@ -28,7 +29,7 @@ object SwaggerParser {
             val methods = paths.getJSONObject(url)
             methods.keySet().forEach { method ->
                 val methodObj = methods.getJSONObject(method)
-                if (conf.additionalParams["controller"] === ALL_CONTROLLERS || methodObj.getJSONArray("tags").intersect(getOnly).isNotEmpty()) {
+                if (selectedController.contains(ALL_CONTROLLERS) || methodObj.getJSONArray("tags").intersect(getOnly).isNotEmpty()) {
                     if (!ret.paths.contains(url)) {
                         ret.paths[url] = mutableListOf()
                     }

@@ -52,6 +52,7 @@ class SwaggerService {
         }
 
         ConfigHelper.engineVersion = version
+        ConfigHelper.forceDownload = false
     }
 
 
@@ -104,6 +105,8 @@ class SwaggerService {
             logger.error(e)
             Notifications.Bus.notify(Notification("ADB Logs", "Swagger error", e.stackTrace.toString(), NotificationType.ERROR))
             return false
+        } finally {
+            ConfigHelper.history = info
         }
 
 

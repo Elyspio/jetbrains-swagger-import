@@ -5,7 +5,6 @@ import com.github.elyspio.swaggercodegen.helper.FileHelper
 import com.github.elyspio.swaggercodegen.services.generators.codegen.ICodegen
 import com.github.elyspio.swaggercodegen.ui.DependencyDialog.Dependency
 import com.github.elyspio.swaggercodegen.ui.SwaggerFormData
-import com.github.elyspio.swaggercodegen.ui.format.JavaFormatInput
 import java.io.File
 import java.nio.charset.Charset
 import java.nio.file.Files
@@ -84,7 +83,7 @@ abstract class JvmCodegen(private val info: SwaggerFormData) : ICodegen {
     }
 
     protected fun hightlightGradle() {
-        val gradle = GradleDependency(info.additionalParams[(JavaFormatInput.gradleBuildLocation)] as String)
+        val gradle = GradleDependency(info.additionalParams.jvm!!.gradleBuildLocation)
 
         val dependencies = ArrayList<Dependency>()
         this.dependencyList.forEach {
@@ -107,11 +106,10 @@ abstract class JvmCodegen(private val info: SwaggerFormData) : ICodegen {
 
     private fun changePackageName(files: Collection<File>) {
 
-        val basePackage = info.additionalParams["package"] as String
+        val basePackage = info.additionalParams.jvm!!.packagePath
 
         files.forEach {
             val packageName = FileHelper.getPackage(it.path)
-            println(packageName)
             val content = it.readLines(Charset.forName("UTF-8")).toMutableList()
 //            content[0] = "package $packageName;"
 

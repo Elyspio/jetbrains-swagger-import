@@ -11,12 +11,8 @@ import javax.swing.JLabel
 
 class TypeScriptTestRestInput(ui: SwaggerDialog) : FormatInput(ui) {
 
-    companion object {
-        const val controllerName = "controller"
-    }
 
-
-    private var threadSingloton: Thread? = null
+    private var threadSingleton: Thread? = null
 
     private fun createControllerNameInput(): List<IFormatInput.Data> {
         val label = JLabel("Controller")
@@ -28,7 +24,8 @@ class TypeScriptTestRestInput(ui: SwaggerDialog) : FormatInput(ui) {
         val formatCombo = ComboBox(items)
         formatCombo.selectedItem = ALL_CONTROLLERS
         formatCombo.addActionListener {
-            ui.data.additionalParams[controllerName] = formatCombo.selectedItem ?: ALL_CONTROLLERS
+            val controllers = listOf((formatCombo.selectedItem ?: ALL_CONTROLLERS) as String)
+            ui.data.additionalParams.typeScriptTestUnit!!.controllers = controllers
         }
 
         formatCombo.size = Dimension(Constants.uiWidth, 40)
@@ -38,8 +35,8 @@ class TypeScriptTestRestInput(ui: SwaggerDialog) : FormatInput(ui) {
 
         ui.data.observers[SwaggerDialog.SwaggerInfo.ObservableProperties.URL]?.add { url ->
 
-            threadSingloton?.interrupt()
-            threadSingloton = Thread {
+            threadSingleton?.interrupt()
+            threadSingleton = Thread {
                 try {
                     formatCombo.removeAllItems()
                     formatCombo.addItem(ALL_CONTROLLERS)
@@ -52,7 +49,7 @@ class TypeScriptTestRestInput(ui: SwaggerDialog) : FormatInput(ui) {
                     System.err.println(e.toString())
                 }
             }
-            threadSingloton!!.start()
+            threadSingleton!!.start()
 
         }
 

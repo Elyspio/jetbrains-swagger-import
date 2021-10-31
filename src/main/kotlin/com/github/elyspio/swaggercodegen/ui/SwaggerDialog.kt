@@ -1,9 +1,9 @@
 package com.github.elyspio.swaggercodegen.ui
 
 import com.github.elyspio.swaggercodegen.core.Format
+import com.github.elyspio.swaggercodegen.helper.ConfigHelper
 import com.github.elyspio.swaggercodegen.helper.FileHelper
 import com.github.elyspio.swaggercodegen.ui.format.IFormatInput
-import com.github.elyspio.swaggercodegen.ui.format.JavaFormatInput
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
@@ -11,6 +11,7 @@ import com.intellij.openapi.ui.TextBrowseFolderListener
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.DocumentAdapter
 import com.intellij.util.containers.stream
+import kotlinx.serialization.Serializable
 import org.jetbrains.annotations.Nullable
 import java.awt.Dimension
 import java.awt.GridBagConstraints
@@ -54,6 +55,7 @@ class SwaggerDialog : DialogWrapper(true) {
         folderLabel.border = BorderFactory.createEmptyBorder(0, 0, 0, 10)
 
         val button = TextFieldWithBrowseButton()
+        button.textField.text = data.output
         val fd = FileChooserDescriptor(false, true, false, false, false, false)
         button.addBrowseFolderListener(TextBrowseFolderListener(fd))
         button.textField.document.addDocumentListener(object : DocumentAdapter() {
@@ -75,6 +77,7 @@ class SwaggerDialog : DialogWrapper(true) {
         label.border = BorderFactory.createEmptyBorder(0, 0, 0, 5)
 
         val urlField = JTextField()
+        urlField.text = data.url
 
         urlField.document.addDocumentListener(object : DocumentListener {
             override fun insertUpdate(e: DocumentEvent?) {
@@ -161,15 +164,31 @@ class SwaggerDialog : DialogWrapper(true) {
     init {
         init()
         title = "Swagger dialog"
+        ConfigHelper.history?.let {
+            this.data.additionalParams = it.additionalParams
+            this.data.format = it.format
+            this.data.output = it.output
+            this.data.url = it.url
+        }
     }
 
 
     class SwaggerInfo(private var ui: SwaggerDialog) {
-        var output: String = ""
+        var output: String = ConfigHelper.history?.output ?: ""
             internal set
 
-        var format: Format by Delegates.observable(Format.TypeScriptAxios) { _, oldValue, newValue ->
+        var format: Format by Delegates.observable(ConfigHelper.history?.format ?: Format.TypeScriptAxios) { _, oldValue, newValue ->
             run {
+
+                if (newValue === Format.JavaRetrofit2 || newValue === Format.Kotlin) {
+                    this.additionalParams.jvm = JvmParams(
+                        this.additionalParams.jvm?.packagePath ?: "",
+                        this.additionalParams.jvm?.gradleBuildLocation ?: ""
+                    )
+                } else if (newValue === Format.TypeScriptRestTest) {
+                    this.additionalParams.typeScriptTestUnit = TypeScriptTestUnitParam(this.additionalParams.typeScriptTestUnit?.controllers ?: listOf())
+                }
+
                 ui.additionalInputs.forEach { entry ->
                     run {
                         if (entry.key == oldValue) {
@@ -181,11 +200,13 @@ class SwaggerDialog : DialogWrapper(true) {
                         if (entry.key == newValue) {
 
                             if (entry.key == Format.JavaRetrofit2 && output.isNotEmpty()) {
-                                additionalParams[JavaFormatInput.packagePath] = FileHelper.getPackage(output)
-                                (entry.value[0].input as JTextField).text = additionalParams[JavaFormatInput.packagePath] as String
+                                val packagePath = FileHelper.getPackage(output)
+                                val gradlePath = FileHelper.getGradleBuild(output) ?: ""
+                                additionalParams.jvm!!.packagePath = packagePath
+                                additionalParams.jvm!!.gradleBuildLocation = gradlePath
 
-                                additionalParams[JavaFormatInput.gradleBuildLocation] = FileHelper.getGradleBuild(output) ?: ""
-                                (entry.value[1].input as TextFieldWithBrowseButton).text = additionalParams[JavaFormatInput.gradleBuildLocation] as String
+                                (entry.value[0].input as JTextField).text = additionalParams.jvm!!.packagePath
+                                (entry.value[1].input as TextFieldWithBrowseButton).text = additionalParams.jvm!!.gradleBuildLocation
                             }
 
                             entry.value.forEach { c ->
@@ -200,7 +221,7 @@ class SwaggerDialog : DialogWrapper(true) {
             internal set
 
 
-        var url: String = ""
+        var url: String = ConfigHelper.history?.url ?: ""
             internal set(value) {
                 field = value
                 observers.filter { it.key == ObservableProperties.URL }.forEach {
@@ -214,7 +235,7 @@ class SwaggerDialog : DialogWrapper(true) {
         var observers: MutableMap<ObservableProperties, MutableList<(value: Any) -> Unit>> = mutableMapOf(Pair(ObservableProperties.URL, mutableListOf()))
 
 
-        var additionalParams: MutableMap<String, Any> = mutableMapOf()
+        var additionalParams = ConfigHelper.history?.additionalParams ?: AdditionalParams()
             internal set
 
 
@@ -233,9 +254,29 @@ class SwaggerDialog : DialogWrapper(true) {
 
 }
 
+@Serializable
 data class SwaggerFormData(
     var output: String,
     var url: String,
-    var additionalParams: MutableMap<String, Any>,
+    var additionalParams: AdditionalParams,
     var format: Format
+)
+
+
+@Serializable
+data class AdditionalParams(
+    var jvm: JvmParams? = null,
+    var typeScriptTestUnit: TypeScriptTestUnitParam? = null
+)
+
+@Serializable
+data class TypeScriptTestUnitParam(
+    var controllers: List<String>
+)
+
+
+@Serializable
+data class JvmParams(
+    var packagePath: String,
+    var gradleBuildLocation: String
 )
