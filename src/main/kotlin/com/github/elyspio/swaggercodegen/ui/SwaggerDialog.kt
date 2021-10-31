@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
-import java.awt.GridLayout
 import java.util.*
 import java.util.stream.IntStream
 import javax.swing.*
@@ -119,28 +118,36 @@ class SwaggerDialog : DialogWrapper(true) {
     override fun createCenterPanel(): JComponent {
         val dialogPanel = JPanel(GridBagLayout())
 
-        val leftPanel = JPanel(GridLayout(0, 1))
-        val rightPanel = JPanel(GridLayout(0, 1))
+        val leftPanel = JPanel()
+        leftPanel.layout = BoxLayout(leftPanel, BoxLayout.Y_AXIS)
+        val rightPanel = JPanel()
+        rightPanel.layout = BoxLayout(rightPanel, BoxLayout.Y_AXIS)
 
         val components = ArrayList<JComponent>()
 
-
         createAdditionalPanels()
-
 
         createInputUrl().forEach { c -> components.add(c) }
         createOutputFormat().forEach { c -> components.add(c) }
         createOutputFolder().forEach { c -> components.add(c) }
 
-
-
         additionalInputs.forEach { (_, list) -> list.forEach { c -> components.add(c.label); components.add(c.input) } }
 
         IntStream.range(0, components.size).forEach {
 
+            val height = 35
+
             if (it % 2 == 0) {
+                components[it].minimumSize = Dimension(150, height)
+                components[it].maximumSize = Dimension(150, height)
+                components[it].size = Dimension(150, height)
+                components[it].preferredSize = Dimension(150, height)
                 leftPanel.add(components[it])
             } else {
+                components[it].minimumSize = Dimension(450, height)
+                components[it].maximumSize = Dimension(450, height)
+                components[it].size = Dimension(450, height)
+                components[it].preferredSize = Dimension(450, height)
                 rightPanel.add(components[it])
             }
 
@@ -182,11 +189,11 @@ class SwaggerDialog : DialogWrapper(true) {
 
                 if (newValue === Format.JavaRetrofit2 || newValue === Format.Kotlin) {
                     this.additionalParams.jvm = JvmParams(
-                        this.additionalParams.jvm?.packagePath ?: "",
-                        this.additionalParams.jvm?.gradleBuildLocation ?: ""
+                        this.additionalParams.jvm.packagePath,
+                        this.additionalParams.jvm.gradleBuildLocation
                     )
                 } else if (newValue === Format.TypeScriptRestTest) {
-                    this.additionalParams.typeScriptTestUnit = TypeScriptTestUnitParam(this.additionalParams.typeScriptTestUnit?.controllers ?: listOf())
+                    this.additionalParams.typeScriptTestUnit = TypeScriptTestUnitParam(this.additionalParams.typeScriptTestUnit.controllers)
                 }
 
                 ui.additionalInputs.forEach { entry ->
@@ -202,11 +209,11 @@ class SwaggerDialog : DialogWrapper(true) {
                             if (entry.key == Format.JavaRetrofit2 && output.isNotEmpty()) {
                                 val packagePath = FileHelper.getPackage(output)
                                 val gradlePath = FileHelper.getGradleBuild(output) ?: ""
-                                additionalParams.jvm!!.packagePath = packagePath
-                                additionalParams.jvm!!.gradleBuildLocation = gradlePath
+                                additionalParams.jvm.packagePath = packagePath
+                                additionalParams.jvm.gradleBuildLocation = gradlePath
 
-                                (entry.value[0].input as JTextField).text = additionalParams.jvm!!.packagePath
-                                (entry.value[1].input as TextFieldWithBrowseButton).text = additionalParams.jvm!!.gradleBuildLocation
+                                (entry.value[0].input as JTextField).text = additionalParams.jvm.packagePath
+                                (entry.value[1].input as TextFieldWithBrowseButton).text = additionalParams.jvm.gradleBuildLocation
                             }
 
                             entry.value.forEach { c ->
@@ -265,8 +272,8 @@ data class SwaggerFormData(
 
 @Serializable
 data class AdditionalParams(
-    var jvm: JvmParams? = null,
-    var typeScriptTestUnit: TypeScriptTestUnitParam? = null
+    var jvm: JvmParams = JvmParams("", ""),
+    var typeScriptTestUnit: TypeScriptTestUnitParam = TypeScriptTestUnitParam(listOf())
 )
 
 @Serializable

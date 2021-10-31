@@ -17,7 +17,7 @@ class TypescriptTestUnit(private val info: SwaggerFormData) : ICodegen {
     override fun use(): List<String> = listOf()
 
     override fun post() {
-        var swaggerDefinition = SwaggerParser.extract(info)
+        val swaggerDefinition = SwaggerParser.extract(info)
         val projectFiles = findServerPath(info.output)
 
         val testFolder = File(projectFiles.srcFile, "tests")
@@ -26,18 +26,18 @@ class TypescriptTestUnit(private val info: SwaggerFormData) : ICodegen {
 
         controllerFolder.mkdirs()
 
-        val selectedController = info.additionalParams.typeScriptTestUnit!!.controllers
+        val selectedController = info.additionalParams.typeScriptTestUnit.controllers
 
         if (selectedController.contains(ALL_CONTROLLERS)) {
-            info.additionalParams.typeScriptTestUnit!!.controllers = swaggerDefinition.tags.map { it.name }
+            info.additionalParams.typeScriptTestUnit.controllers = swaggerDefinition.tags.map { it.name }
         } else {
-            info.additionalParams.typeScriptTestUnit!!.controllers = listOf(ALL_CONTROLLERS)
+            info.additionalParams.typeScriptTestUnit.controllers = listOf(ALL_CONTROLLERS)
         }
 
         selectedController.toList().forEach {
 
             val newInfo = info.deepClonePolymorphic()
-            newInfo.additionalParams.typeScriptTestUnit!!.controllers = listOf(it)
+            newInfo.additionalParams.typeScriptTestUnit.controllers = listOf(it)
             val newSwaggerDefinition = SwaggerParser.extract(newInfo)
 
             var path = projectFiles.serverFile.relativeTo(File(controllerFolder.path)).path

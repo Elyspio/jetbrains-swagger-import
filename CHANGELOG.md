@@ -14,6 +14,12 @@
 ### Fixed
 
 ### Security
+## [0.4.4]
+
+### Changed
+
+Better UI
+
 ## [0.4.2]
 ### Added
 

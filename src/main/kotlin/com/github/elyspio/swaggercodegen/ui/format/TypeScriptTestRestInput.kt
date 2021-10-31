@@ -25,7 +25,7 @@ class TypeScriptTestRestInput(ui: SwaggerDialog) : FormatInput(ui) {
         formatCombo.selectedItem = ALL_CONTROLLERS
         formatCombo.addActionListener {
             val controllers = listOf((formatCombo.selectedItem ?: ALL_CONTROLLERS) as String)
-            ui.data.additionalParams.typeScriptTestUnit!!.controllers = controllers
+            ui.data.additionalParams.typeScriptTestUnit.controllers = controllers
         }
 
         formatCombo.size = Dimension(Constants.uiWidth, 40)

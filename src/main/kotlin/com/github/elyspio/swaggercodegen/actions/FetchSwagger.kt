@@ -17,7 +17,7 @@ class FetchSwagger : AnAction() {
             if (service.generate(dialog.data.build())) {
                 NotificationService.createNotification("Import succeded")
             } else {
-                NotificationService.createNotification("Error while importing Swagger api with url ${dialog.data.url}", serverity = MessageType.ERROR)
+                NotificationService.createNotification("Error while importing Swagger api with url ${dialog.data.url}", severity = MessageType.ERROR)
             }
         }
 

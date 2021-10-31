@@ -83,7 +83,7 @@ abstract class JvmCodegen(private val info: SwaggerFormData) : ICodegen {
     }
 
     protected fun hightlightGradle() {
-        val gradle = GradleDependency(info.additionalParams.jvm!!.gradleBuildLocation)
+        val gradle = GradleDependency(info.additionalParams.jvm.gradleBuildLocation)
 
         val dependencies = ArrayList<Dependency>()
         this.dependencyList.forEach {
@@ -106,7 +106,7 @@ abstract class JvmCodegen(private val info: SwaggerFormData) : ICodegen {
 
     private fun changePackageName(files: Collection<File>) {
 
-        val basePackage = info.additionalParams.jvm!!.packagePath
+        val basePackage = info.additionalParams.jvm.packagePath
 
         files.forEach {
             val packageName = FileHelper.getPackage(it.path)

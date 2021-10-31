@@ -13,13 +13,13 @@ object NotificationService {
 
     fun createNotification(
         title: String,
-        serverity: MessageType = MessageType.INFO
+        severity: MessageType = MessageType.INFO
     ) {
         val project = ProjectManager.getInstance().openProjects[0]
 
         val statusBar: StatusBar = WindowManager.getInstance().getStatusBar(project)
 
-        JBPopupFactory.getInstance().createHtmlTextBalloonBuilder(title, serverity) {}
+        JBPopupFactory.getInstance().createHtmlTextBalloonBuilder(title, severity) {}
             .createBalloon()
             .show(RelativePoint.getCenterOf(statusBar.component), Balloon.Position.above)
 

@@ -13,7 +13,7 @@ object SwaggerParser {
     fun extract(conf: SwaggerFormData): SwaggerDefinition {
         val raw = URL(conf.url).readText()
         val json = JSONObject(raw)
-        val selectedController = conf.additionalParams.typeScriptTestUnit!!.controllers
+        val selectedController = conf.additionalParams.typeScriptTestUnit.controllers
         val getOnly = setOf(selectedController)
 
         val ret = SwaggerDefinition(json.getString("openapi"), mutableMapOf(), mutableListOf())
