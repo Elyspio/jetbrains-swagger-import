@@ -7,6 +7,7 @@ enum class Format(val label: String, val codegen: String? = null) {
     TypeScriptFetch("TypeScript (fetch)", "typescript-fetch"),
     TypeScriptInversify("TypeScript (inversify)", "typescript-inversify"),
     TypeScriptRestTest("TypeScript (test)"),
+    CSharp("CSharp", "csharp-netcore")
 
 }
 

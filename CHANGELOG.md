@@ -14,6 +14,34 @@
 ### Fixed
 
 ### Security
+## [0.5.1]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+Fix generation for OpenApi specifications
+
+### Security
+## [0.5.0]
+### Added
+
+Add CSharp client
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
 ## [0.4.4]
 
 ### Changed

@@ -78,7 +78,7 @@ class JavaFormatInput(ui: SwaggerDialog) : FormatInput(ui) {
     }
 
     override fun onDirectoryChange(dir: String) {
-        ui.data.additionalParams.jvm.packagePath = FileHelper.getPackage(dir)
+        ui.data.additionalParams.jvm.packagePath = FileHelper.getJvmPackage(dir)
         ((ui.additionalInputs[ui.data.format]?.get(0))?.input as JTextField).text = ui.data.additionalParams.jvm.packagePath
 
         ui.data.additionalParams.jvm.gradleBuildLocation = FileHelper.getGradleBuild(dir) ?: ""

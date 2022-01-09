@@ -19,6 +19,7 @@ interface ICodegen {
                 Format.TypeScriptFetch -> TypescriptCodegen(info)
                 Format.TypeScriptInversify -> TypescriptCodegen(info)
                 Format.TypeScriptRestTest -> TypescriptTestUnit(info)
+                Format.CSharp -> CSharpCodegen(info)
             }
         }
     }

@@ -109,7 +109,7 @@ abstract class JvmCodegen(private val info: SwaggerFormData) : ICodegen {
         val basePackage = info.additionalParams.jvm.packagePath
 
         files.forEach {
-            val packageName = FileHelper.getPackage(it.path)
+            val packageName = FileHelper.getJvmPackage(it.path)
             val content = it.readLines(Charset.forName("UTF-8")).toMutableList()
 //            content[0] = "package $packageName;"
 

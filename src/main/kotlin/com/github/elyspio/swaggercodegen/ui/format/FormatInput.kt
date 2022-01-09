@@ -19,6 +19,7 @@ interface IFormatInput {
                 Format.TypeScriptAxios -> null
                 Format.TypeScriptFetch -> null
                 Format.TypeScriptInversify -> null
+                Format.CSharp -> CSharpFormatInput(ui)
                 Format.TypeScriptRestTest -> TypeScriptTestRestInput(ui)
             }
         }

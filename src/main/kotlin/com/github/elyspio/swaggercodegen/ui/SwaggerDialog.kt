@@ -207,13 +207,19 @@ class SwaggerDialog : DialogWrapper(true) {
                         if (entry.key == newValue) {
 
                             if (entry.key == Format.JavaRetrofit2 && output.isNotEmpty()) {
-                                val packagePath = FileHelper.getPackage(output)
+                                val packagePath = FileHelper.getJvmPackage(output)
                                 val gradlePath = FileHelper.getGradleBuild(output) ?: ""
                                 additionalParams.jvm.packagePath = packagePath
                                 additionalParams.jvm.gradleBuildLocation = gradlePath
 
                                 (entry.value[0].input as JTextField).text = additionalParams.jvm.packagePath
                                 (entry.value[1].input as TextFieldWithBrowseButton).text = additionalParams.jvm.gradleBuildLocation
+                            }
+
+                            if (entry.key == Format.CSharp && output.isNotEmpty()) {
+                                additionalParams.csharp.namespace = FileHelper.getCSharpPackage(output)
+
+                                (entry.value[0].input as JTextField).text = additionalParams.csharp.namespace
                             }
 
                             entry.value.forEach { c ->
@@ -272,6 +278,7 @@ data class SwaggerFormData(
 
 @Serializable
 data class AdditionalParams(
+    var csharp: CSharpParams = CSharpParams(""),
     var jvm: JvmParams = JvmParams("", ""),
     var typeScriptTestUnit: TypeScriptTestUnitParam = TypeScriptTestUnitParam(listOf())
 )
@@ -286,4 +293,9 @@ data class TypeScriptTestUnitParam(
 data class JvmParams(
     var packagePath: String,
     var gradleBuildLocation: String
+)
+
+@Serializable
+data class CSharpParams(
+    var namespace: String,
 )
