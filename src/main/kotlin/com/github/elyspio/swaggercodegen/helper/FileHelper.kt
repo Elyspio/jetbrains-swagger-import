@@ -1,5 +1,6 @@
 package com.github.elyspio.swaggercodegen.helper
 
+import com.intellij.util.io.exists
 import com.intellij.util.io.isFile
 import java.io.File
 import java.nio.file.Files
@@ -73,11 +74,11 @@ object FileHelper {
     }
 
 
-    fun getPackage(file: String): String {
-        return this.getPackage(Path.of(file))
+    fun getJvmPackage(file: String): String {
+        return this.getJvmPackage(Path.of(file))
     }
 
-    fun getPackage(file: Path): String {
+    fun getJvmPackage(file: Path): String {
         val paths = file.toFile().path.split(File.separator)
 
         val minus = if (file.isFile()) 1 else 0
@@ -147,5 +148,37 @@ object FileHelper {
         return node.path.substringAfterLast("/")
     }
 
+
+    fun getCSharpPackage(folder: String): String {
+        return getCSharpPackage(Path.of(folder))
+    }
+
+    fun getCSharpPackage(output: Path): String {
+        var currentFolder = output
+        while (currentFolder.exists()) {
+            val files = listFile(currentFolder)
+            if (!files.any { it.isFile && it.path.endsWith(".csproj") }) {
+                currentFolder = currentFolder.parent
+            } else {
+                val found = files.first { it.isFile && it.path.endsWith(".csproj") }
+                val baseNamespace = found.path.substringAfterLast(File.separator).substringBeforeLast(".")
+                val projectFolder = found.path.substringBeforeLast(File.separator)
+                val additionalNamespace = output
+                    .toString().substring(projectFolder.length + 1)
+                    .replace(File.separator, ".")
+                return "$baseNamespace.$additionalNamespace"
+            }
+        }
+        throw Exception("No .csproj files found in $output or in its parent")
+    }
+
+
+    fun listCSharpFiles(path: Path): Collection<File> {
+        return listFile(path, listOf("cs"))
+    }
+
+    fun listCSharpFiles(path: String): Collection<File> {
+        return listCSharpFiles(Path.of(path))
+    }
 
 }

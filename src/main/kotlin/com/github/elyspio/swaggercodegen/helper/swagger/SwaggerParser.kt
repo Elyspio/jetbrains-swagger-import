@@ -61,15 +61,33 @@ object SwaggerParser {
     fun getTags(url: String): List<String> {
         val raw = URL(url).readText()
         val json = JSONObject(raw)
-        val tags = json.getJSONArray("tags")
+        val jsonKeys = json.keySet()
 
-        val ret = mutableListOf<String>()
+        val ret = mutableSetOf<String>()
 
-        for (i in 0 until tags.length()) {
-            ret.add(tags.getJSONObject(i).getString("name"))
+        if (jsonKeys.contains("tags")) {
+            val tags = json.getJSONArray("tags")
+
+            for (i in 0 until tags.length()) {
+                ret.add(tags.getJSONObject(i).getString("name"))
+            }
+        } else {
+            val paths = json.getJSONObject("paths")
+            val routes = paths.keySet()
+            routes.forEach {
+                val route = paths.getJSONObject(it)
+                val methods = route.keySet()
+                methods.forEach { method ->
+                    val tags = route.getJSONObject(method).getJSONArray("tags")
+
+                    for (i in 0 until tags.length()) {
+                        ret.add(tags.getString(i))
+                    }
+                }
+            }
         }
 
-        return ret
+        return ret.toList()
     }
 
 }

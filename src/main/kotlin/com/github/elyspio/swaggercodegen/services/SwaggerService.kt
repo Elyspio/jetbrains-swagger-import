@@ -12,8 +12,6 @@ import com.intellij.notification.Notifications
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.ui.MessageType
 import com.intellij.util.io.exists
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -78,20 +76,11 @@ class SwaggerService {
                     codegen.let { command.addAll(it.use()) }
 
                     val processBuilder = ProcessBuilder(command)
-                    processBuilder.directory(FileHelper.getBundleJavaFolder().toFile())
+                        .inheritIO()
+                        .directory(FileHelper.getBundleJavaFolder().toFile())
+
                     val process = processBuilder.start()
-                    BufferedReader(InputStreamReader(process.inputStream)).use { `in` ->
-                        while (true) {
-                            val line = `in`.readLine() ?: break
-                            println(line)
-                        }
-                    }
-                    BufferedReader(InputStreamReader(process.errorStream)).use { `in` ->
-                        while (true) {
-                            val line = `in`.readLine() ?: break
-                            println(line)
-                        }
-                    }
+
                     process.waitFor()
                     codegen.post()
                     return process.exitValue() == 0
