@@ -15,7 +15,7 @@ class FetchSwagger : AnAction() {
         val dialog = SwaggerDialog()
         if (dialog.showAndGet()) {
             if (service.generate(dialog.data.build())) {
-                NotificationService.createNotification("Import succeded")
+                NotificationService.createNotification("Import succeeded")
             } else {
                 NotificationService.createNotification("Error while importing Swagger api with url ${dialog.data.url}", severity = MessageType.ERROR)
             }

@@ -12,16 +12,16 @@ import com.intellij.ui.awt.RelativePoint
 object NotificationService {
 
     fun createNotification(
-        title: String,
-        severity: MessageType = MessageType.INFO
+            title: String,
+            severity: MessageType = MessageType.INFO
     ) {
         val project = ProjectManager.getInstance().openProjects[0]
 
         val statusBar: StatusBar = WindowManager.getInstance().getStatusBar(project)
 
         JBPopupFactory.getInstance().createHtmlTextBalloonBuilder(title, severity) {}
-            .createBalloon()
-            .show(RelativePoint.getCenterOf(statusBar.component), Balloon.Position.above)
+                .createBalloon()
+                .show(RelativePoint.getCenterOf(statusBar.component), Balloon.Position.above)
 
 
     }

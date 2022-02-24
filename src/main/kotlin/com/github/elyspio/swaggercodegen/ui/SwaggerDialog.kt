@@ -3,14 +3,13 @@ package com.github.elyspio.swaggercodegen.ui
 import com.github.elyspio.swaggercodegen.core.Format
 import com.github.elyspio.swaggercodegen.helper.ConfigHelper
 import com.github.elyspio.swaggercodegen.helper.FileHelper
+import com.github.elyspio.swaggercodegen.ui.common.AppComboBox
 import com.github.elyspio.swaggercodegen.ui.format.IFormatInput
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
-import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.TextBrowseFolderListener
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.DocumentAdapter
-import com.intellij.util.containers.stream
 import kotlinx.serialization.Serializable
 import org.jetbrains.annotations.Nullable
 import java.awt.Dimension
@@ -35,16 +34,29 @@ class SwaggerDialog : DialogWrapper(true) {
         val label = JLabel("Output format")
         label.border = BorderFactory.createEmptyBorder(0, 0, 0, 5)
 
-        val formatCombo = ComboBox(Format.values().stream().map { it.label }.toArray())
+        val formatCombo = AppComboBox(arrayOf(
+                "- TypeScript -",
+                Format.TypeScriptAxios.label,
+                Format.TypeScriptInversify.label,
+                Format.TypeScriptFetch.label,
+                "- JVM -",
+                Format.JavaRetrofit2.label,
+                Format.Kotlin.label,
+                Format.KotlinCoroutine.label,
+                "- Others -",
+                Format.CSharp.label,
+                Format.TypeScriptRestTest.label,
+        ))
         formatCombo.selectedItem = data.format.label
+        formatCombo.isSwingPopup = true
         formatCombo.addActionListener {
             data.format = Format.values().find { f -> f.label == formatCombo.selectedItem } as Format
         }
 
 
+
         formatCombo.size = Dimension(Constants.uiWidth, 40)
         formatCombo.minimumSize = Dimension(Constants.uiWidth, 40)
-
         return listOf(label, formatCombo)
     }
 
@@ -184,13 +196,14 @@ class SwaggerDialog : DialogWrapper(true) {
         var output: String = ConfigHelper.history?.output ?: ""
             internal set
 
-        var format: Format by Delegates.observable(ConfigHelper.history?.format ?: Format.TypeScriptAxios) { _, oldValue, newValue ->
+        var format: Format by Delegates.observable(ConfigHelper.history?.format
+                ?: Format.TypeScriptAxios) { _, oldValue, newValue ->
             run {
 
-                if (newValue === Format.JavaRetrofit2 || newValue === Format.Kotlin) {
+                if (listOf(Format.JavaRetrofit2, Format.KotlinCoroutine, Format.Kotlin).contains(newValue)) {
                     this.additionalParams.jvm = JvmParams(
-                        this.additionalParams.jvm.packagePath,
-                        this.additionalParams.jvm.gradleBuildLocation
+                            this.additionalParams.jvm.packagePath,
+                            this.additionalParams.jvm.gradleBuildLocation
                     )
                 } else if (newValue === Format.TypeScriptRestTest) {
                     this.additionalParams.typeScriptTestUnit = TypeScriptTestUnitParam(this.additionalParams.typeScriptTestUnit.controllers)
@@ -269,33 +282,33 @@ class SwaggerDialog : DialogWrapper(true) {
 
 @Serializable
 data class SwaggerFormData(
-    var output: String,
-    var url: String,
-    var additionalParams: AdditionalParams,
-    var format: Format
+        var output: String,
+        var url: String,
+        var additionalParams: AdditionalParams,
+        var format: Format
 )
 
 
 @Serializable
 data class AdditionalParams(
-    var csharp: CSharpParams = CSharpParams(""),
-    var jvm: JvmParams = JvmParams("", ""),
-    var typeScriptTestUnit: TypeScriptTestUnitParam = TypeScriptTestUnitParam(listOf())
+        var csharp: CSharpParams = CSharpParams(""),
+        var jvm: JvmParams = JvmParams("", ""),
+        var typeScriptTestUnit: TypeScriptTestUnitParam = TypeScriptTestUnitParam(listOf())
 )
 
 @Serializable
 data class TypeScriptTestUnitParam(
-    var controllers: List<String>
+        var controllers: List<String>
 )
 
 
 @Serializable
 data class JvmParams(
-    var packagePath: String,
-    var gradleBuildLocation: String
+        var packagePath: String,
+        var gradleBuildLocation: String
 )
 
 @Serializable
 data class CSharpParams(
-    var namespace: String,
+        var namespace: String,
 )

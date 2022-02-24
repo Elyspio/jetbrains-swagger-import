@@ -57,12 +57,12 @@ class TypescriptTestUnit(private val info: SwaggerFormData) : ICodegen {
         val apiFolder = File(restFolder, "api")
         apiFolder.mkdirs()
         SwaggerService().generate(
-            SwaggerFormData(
-                output = apiFolder.toString(),
-                format = Format.TypeScriptAxios,
-                url = info.url,
-                additionalParams = AdditionalParams()
-            )
+                SwaggerFormData(
+                        output = apiFolder.toString(),
+                        format = Format.TypeScriptAxios,
+                        url = info.url,
+                        additionalParams = AdditionalParams()
+                )
         )
 
     }
@@ -98,9 +98,9 @@ class TypescriptTestUnit(private val info: SwaggerFormData) : ICodegen {
 
     private fun normalizeControllerName(original: String): String {
         var new = original
-            .replace(Regex("([A-Z])"), ".$1")
-            .replace(" ", "")
-            .toLowerCase()
+                .replace(Regex("([A-Z])"), ".$1")
+                .replace(" ", "")
+                .toLowerCase()
 
         if (new[0] == '.') new = new.substring(1)
         return new
@@ -110,6 +110,6 @@ class TypescriptTestUnit(private val info: SwaggerFormData) : ICodegen {
 }
 
 data class TsProjectInfo(
-    val srcFile: File,
-    val serverFile: File
+        val srcFile: File,
+        val serverFile: File
 )

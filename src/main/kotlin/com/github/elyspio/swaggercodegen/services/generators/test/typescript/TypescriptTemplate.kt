@@ -68,6 +68,6 @@ describe("Rest", () => {
 
 fun removeSpaces(str: String): String {
     return str
-        .replace(" ", "")
-        .replace("_", "")
+            .replace(" ", "")
+            .replace("_", "")
 }

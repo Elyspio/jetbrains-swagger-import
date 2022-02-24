@@ -15,6 +15,7 @@ interface ICodegen {
             return when (info.format) {
                 Format.JavaRetrofit2 -> JavaCodegen(info)
                 Format.Kotlin -> KotlinCodegen(info)
+                Format.KotlinCoroutine -> KotlinCodegen(info)
                 Format.TypeScriptAxios -> TypescriptCodegen(info)
                 Format.TypeScriptFetch -> TypescriptCodegen(info)
                 Format.TypeScriptInversify -> TypescriptCodegen(info)

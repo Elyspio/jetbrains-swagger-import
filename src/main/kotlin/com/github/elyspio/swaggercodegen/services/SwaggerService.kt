@@ -12,6 +12,7 @@ import com.intellij.notification.Notifications
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.ui.MessageType
 import com.intellij.util.io.exists
+import org.jetbrains.rpc.LOG
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -40,12 +41,12 @@ class SwaggerService {
     private fun downloadLib(version: Version) {
 
         val website = URL(
-            "https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/$version/openapi-generator-cli-$version.jar"
+                "https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/$version/openapi-generator-cli-$version.jar"
         )
 
         website.openStream().use { inputStream ->
             Files.copy(
-                inputStream, FileHelper.getJarPath(), StandardCopyOption.REPLACE_EXISTING
+                    inputStream, FileHelper.getJarPath(), StandardCopyOption.REPLACE_EXISTING
             )
         }
 
@@ -70,14 +71,16 @@ class SwaggerService {
             when {
                 info.format.codegen != null -> {
                     val command = mutableListOf(
-                        "java", "-jar", FileHelper.getJarPath().toString(), "generate", "--skip-validate-spec", "-i", info.url, "-g", info.format.codegen!!, "-o", info.output
+                            "java", "-jar", FileHelper.getJarPath().toString(), "generate", "--skip-validate-spec", "-i", info.url, "-g", info.format.codegen!!, "-o", info.output
                     )
 
                     codegen.let { command.addAll(it.use()) }
 
+                    LOG.info("command: $command")
+
                     val processBuilder = ProcessBuilder(command)
-                        .inheritIO()
-                        .directory(FileHelper.getBundleJavaFolder().toFile())
+                            .inheritIO()
+                            .directory(FileHelper.getBundleJavaFolder().toFile())
 
                     val process = processBuilder.start()
 

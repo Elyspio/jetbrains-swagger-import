@@ -8,8 +8,8 @@ class JavaCodegen(info: SwaggerFormData) : JvmCodegen(info) {
     override val dependencyList = listOf("swagger-annotations")
     override val keepFolders = listOf("api", "model")
     override val additionalProperties = listOf(
-        "--library", "retrofit2",
-        "--additional-properties", "java8=true,hideGenerationTimestamp=true,dateLibrary=java8,serializationLibrary=gson"
+            "--library", "retrofit2",
+            "--additional-properties", "java8=true,hideGenerationTimestamp=true,dateLibrary=java8,serializationLibrary=gson"
     )
 
     override val baseFolderPath = listOf("src", "main", "java", "org", "openapitools", "client")

@@ -12,6 +12,7 @@ This Fancy IntelliJ Platform Plugin allow you to generate swagger implementation
     - Generate Unit tests
 - Java/Kotlin:
     - Retrofit2
+    - Retrofit 2 (with coroutine support)
 
 <!-- Plugin description end -->
 

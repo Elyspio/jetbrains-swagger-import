@@ -164,8 +164,8 @@ object FileHelper {
                 val baseNamespace = found.path.substringAfterLast(File.separator).substringBeforeLast(".")
                 val projectFolder = found.path.substringBeforeLast(File.separator)
                 val additionalNamespace = output
-                    .toString().substring(projectFolder.length + 1)
-                    .replace(File.separator, ".")
+                        .toString().substring(projectFolder.length + 1)
+                        .replace(File.separator, ".")
                 return "$baseNamespace.$additionalNamespace"
             }
         }

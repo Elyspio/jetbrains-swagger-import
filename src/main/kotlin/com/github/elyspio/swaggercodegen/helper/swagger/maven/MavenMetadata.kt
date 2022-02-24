@@ -6,24 +6,24 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MavenMetadata(
-    val metadata: Metadata
+        val metadata: Metadata
 )
 
 @Serializable
 data class Metadata(
-    @SerialName("groupId") val groupID: String,
+        @SerialName("groupId") val groupID: String,
 
-    @SerialName("artifactId") val artifactID: String,
+        @SerialName("artifactId") val artifactID: String,
 
-    val versioning: Versioning
+        val versioning: Versioning
 )
 
 @Serializable
 data class Versioning(
-    val latest: String, val release: String, val versions: Versions, val lastUpdated: String
+        val latest: String, val release: String, val versions: Versions, val lastUpdated: String
 )
 
 @Serializable
 data class Versions(
-    val version: List<String>
+        val version: List<String>
 )

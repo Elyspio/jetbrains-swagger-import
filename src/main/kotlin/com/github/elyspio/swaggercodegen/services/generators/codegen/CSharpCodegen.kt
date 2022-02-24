@@ -10,8 +10,8 @@ import java.nio.file.Path
 class CSharpCodegen(private val info: SwaggerFormData) : ICodegen {
 
     override fun use(): List<String> = listOf(
-        "--library", "httpclient",
-        "--additional-properties", "targetFramework=net6.0,nullableReferenceTypes=true",
+            "--library", "httpclient",
+            "--additional-properties", "targetFramework=net6.0,nullableReferenceTypes=true",
     )
 
     override fun post() {
@@ -52,8 +52,8 @@ class CSharpCodegen(private val info: SwaggerFormData) : ICodegen {
         }
 
         FileHelper.move(
-            Path.of(info.output, "src", "Org.OpenAPITools").toFile(),
-            tempFolder.toFile()
+                Path.of(info.output, "src", "Org.OpenAPITools").toFile(),
+                tempFolder.toFile()
         )
 
         FileHelper.delete(File(info.output))

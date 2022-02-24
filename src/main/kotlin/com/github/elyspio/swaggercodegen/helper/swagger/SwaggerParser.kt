@@ -42,11 +42,11 @@ object SwaggerParser {
                         var schemaRef = responseObj.optJSONObject("schema")?.getString("\$ref")
                         schemaRef = schemaRef?.substring(schemaRef.lastIndexOf('/'))
                         operation.responses.add(
-                            Response(
-                                responseObj.optString("description", ""),
-                                schemaRef,
-                                httpCode
-                            )
+                                Response(
+                                        responseObj.optString("description", ""),
+                                        schemaRef,
+                                        httpCode
+                                )
                         )
                     }
                     ret.paths[url]!!.add(operation)

@@ -61,8 +61,8 @@ abstract class JvmCodegen(private val info: SwaggerFormData) : ICodegen {
         }
 
         FileHelper.move(
-            Path.of(info.output, *baseFolderPath.toTypedArray()).toFile(),
-            tempFolder.toFile()
+                Path.of(info.output, *baseFolderPath.toTypedArray()).toFile(),
+                tempFolder.toFile()
         )
 
         FileHelper.delete(File(info.output))
